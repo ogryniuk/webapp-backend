@@ -35,5 +35,4 @@ public interface EmailTemplate {
     String getBody();
 
     String getEmail();
-
 }

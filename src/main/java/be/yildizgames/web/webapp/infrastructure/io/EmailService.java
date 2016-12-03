@@ -25,7 +25,13 @@
 
 package be.yildizgames.web.webapp.infrastructure.io;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.util.Properties;
 
 /**
  * @author Grégory Van den Borre
@@ -33,7 +39,48 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailService {
 
+    private final Session session;
+
+    /**
+     * Mail address.
+     */
+
+    private final String username;
+
+    public EmailService(
+            @Value("${mail.login}") String username,
+            @Value("${mail.password}") String password,
+            @Value("${mail.smtp.auth}") String auth,
+            @Value("${mail.smtp.starttls.enable}") String tls,
+            @Value("${mail.smtp.host}") String host,
+            @Value("${mail.smtp.port}") String port
+    ) {
+        super();
+        this.username = username;
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", auth);
+        props.put("mail.smtp.starttls.enable", tls);
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", port);
+
+
+        this.session = Session.getInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
+    }
+
     public void send(EmailTemplate template) {
-        System.out.println("Sending " + template.getTitle() + " to " + template.getEmail());
+        try {
+            MimeMessage message = new MimeMessage(this.session);
+            message.setFrom(new InternetAddress(this.username));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(template.getEmail()));
+            message.setSubject(template.getTitle());
+            message.setText(template.getBody());
+            Transport.send(message);
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+        }
     }
 }
