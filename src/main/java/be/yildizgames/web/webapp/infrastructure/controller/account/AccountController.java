@@ -27,6 +27,7 @@ package be.yildizgames.web.webapp.infrastructure.controller.account;
 
 import be.yildizgames.web.webapp.domain.account.Account;
 import be.yildizgames.web.webapp.domain.account.TemporaryAccount;
+import be.yildizgames.web.webapp.infrastructure.controller.AjaxResponse;
 import be.yildizgames.web.webapp.infrastructure.io.EmailService;
 import be.yildizgames.web.webapp.infrastructure.persistence.AccountPersistence;
 import be.yildizgames.web.webapp.infrastructure.persistence.TemporaryAccountPersistence;
@@ -61,8 +62,9 @@ public class AccountController {
     }
 
     @RequestMapping(value = "api/v1/accounts/creations", method = RequestMethod.POST)
-    public void create(@RequestBody AccountForm form) {
+    public AjaxResponse create(@RequestBody AccountForm form) {
         TemporaryAccount.create(temporaryAccountService, form.getLogin(), form.getPassword(), form.getEmail());
+        return new AjaxResponse();
     }
 
 
