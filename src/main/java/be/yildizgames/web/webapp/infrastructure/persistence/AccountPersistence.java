@@ -33,6 +33,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
 /**
@@ -56,5 +57,13 @@ public class AccountPersistence implements AccountIdProvider, AccountProvider {
     @Override
     public Account getById(String id) {
         return this.accounts.get(id);
+    }
+
+    public Optional<Account> findByLogin(String name) {
+        return Optional.empty();
+    }
+
+    public Optional<Account> findByEmail(String email) {
+        return Optional.empty();
     }
 }

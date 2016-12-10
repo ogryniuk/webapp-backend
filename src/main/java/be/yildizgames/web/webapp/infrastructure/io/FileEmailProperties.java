@@ -23,10 +23,42 @@
 //        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //        SOFTWARE.
 
-package be.yildizgames.web.webapp.domain.account;
+package be.yildizgames.web.webapp.infrastructure.io;
+
+import be.yildiz.common.resource.PropertiesHelper;
+
+import java.io.File;
+import java.util.Properties;
 
 /**
  * @author Grégory Van den Borre
  */
-public interface TemporaryAccountValidator {
+public class FileEmailProperties {
+
+    private final Properties properties;
+    private final String login;
+    private final String password;
+
+    public FileEmailProperties(final String path) {
+        super();
+        this.properties = PropertiesHelper.getPropertiesFromFile(new File(path));
+        this.login = properties.getProperty("mail.login");
+        this.password = properties.getProperty("mail.password");
+        /*this.database = properties.getProperty("mail.smtp.auth");
+        this.host = properties.getProperty("mail.smtp.starttls.enable");
+        this.host = properties.getProperty("mail.smtp.host");
+        this.host = properties.getProperty("mail.smtp.port");*/
+    }
+
+    public Properties getProperties() {
+        return properties;
+    }
+
+    public String getUser() {
+        return login;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
 }

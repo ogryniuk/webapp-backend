@@ -27,11 +27,12 @@ package be.yildizgames.web.webapp.infrastructure.controller.account;
 
 import be.yildizgames.web.webapp.domain.account.Account;
 import be.yildizgames.web.webapp.domain.account.TemporaryAccount;
-import be.yildizgames.web.webapp.domain.account.TemporaryAccountValidator;
+import be.yildizgames.web.webapp.infrastructure.io.EmailService;
 import be.yildizgames.web.webapp.infrastructure.persistence.AccountPersistence;
 import be.yildizgames.web.webapp.infrastructure.persistence.TemporaryAccountPersistence;
 import be.yildizgames.web.webapp.infrastructure.services.TemporaryAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -47,34 +48,38 @@ public class AccountController {
 
     private final TemporaryAccountPersistence temporaryAccountPersistence;
 
-    private final TemporaryAccountValidator temporaryAccountValidator;
+    private final EmailService emailService;
 
 
     @Autowired
-    public AccountController(AccountPersistence accountPersistence, TemporaryAccountService temporaryAccountService, TemporaryAccountPersistence temporaryAccountPersistence, TemporaryAccountValidator temporaryAccountValidator) {
+    public AccountController(AccountPersistence accountPersistence, TemporaryAccountService temporaryAccountService, TemporaryAccountPersistence temporaryAccountPersistence, EmailService emailService) {
         super();
         this.accountPersistence = accountPersistence;
         this.temporaryAccountService = temporaryAccountService;
         this.temporaryAccountPersistence = temporaryAccountPersistence;
-        this.temporaryAccountValidator = temporaryAccountValidator;
+        this.emailService = emailService;
     }
 
-    @RequestMapping(value = "/accounts/creations", method = RequestMethod.POST)
+    @RequestMapping(value = "api/v1/accounts/creations", method = RequestMethod.POST)
     public void create(@RequestBody AccountForm form) {
         TemporaryAccount.create(temporaryAccountService, form.getLogin(), form.getPassword(), form.getEmail());
     }
 
-    @RequestMapping("/accounts/validations/{email}/{token}")
-    public void validate(@PathVariable String email, @PathVariable String token) {
-        this.temporaryAccountPersistence
-                .findByEmail(email)
-                .ifPresent(
-                        a -> a.validate(temporaryAccountValidator, token);
-                );
-    }
 
-    @RequestMapping("/accounts/{id}")
+    @RequestMapping("api/v1/accounts/{id}")
     public Account find(@PathVariable String id) {
         return this.accountPersistence.getById(id);
+    }
+
+    @RequestMapping("api/v1/accounts/validations/logins/unicities")
+    public ResponseEntity<Void> isLoginFree(@RequestParam String name) {
+        int status =  this.accountPersistence.findByLogin(name).isPresent() ? 400 : 200;
+        return ResponseEntity.status(status).build();
+    }
+
+    @RequestMapping("api/v1/accounts/validations/emails/unicities")
+    public ResponseEntity<Void> isEmailFree(@RequestParam String name) {
+        int status =  this.accountPersistence.findByEmail(name).isPresent() ? 400 : 200;
+        return ResponseEntity.status(status).build();
     }
 }

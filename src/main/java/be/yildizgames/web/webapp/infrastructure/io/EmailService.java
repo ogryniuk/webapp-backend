@@ -25,13 +25,11 @@
 
 package be.yildizgames.web.webapp.infrastructure.io;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.Properties;
 
 /**
  * @author Grégory Van den Borre
@@ -47,26 +45,14 @@ public class EmailService {
 
     private final String username;
 
-    public EmailService(
-            @Value("${mail.login}") String username,
-            @Value("${mail.password}") String password,
-            @Value("${mail.smtp.auth}") String auth,
-            @Value("${mail.smtp.starttls.enable}") String tls,
-            @Value("${mail.smtp.host}") String host,
-            @Value("${mail.smtp.port}") String port
-    ) {
+    public EmailService(FileEmailProperties properties) {
         super();
-        this.username = username;
-        Properties props = new Properties();
-        props.put("mail.smtp.auth", auth);
-        props.put("mail.smtp.starttls.enable", tls);
-        props.put("mail.smtp.host", host);
-        props.put("mail.smtp.port", port);
+        this.username = properties.getUser();
 
 
-        this.session = Session.getInstance(props, new Authenticator() {
+        this.session = Session.getInstance(properties.getProperties(), new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
+                return new PasswordAuthentication(username, properties.getPassword());
             }
         });
     }

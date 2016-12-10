@@ -25,10 +25,19 @@
 
 package be.yildizgames.web.webapp;
 
+import be.yildiz.module.database.C3P0ConnectionProvider;
+import be.yildiz.module.database.DataBaseConnectionProvider;
+import be.yildiz.module.database.DbFileProperties;
+import be.yildizgames.web.webapp.infrastructure.io.EmailService;
+import be.yildizgames.web.webapp.infrastructure.io.FileEmailProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+
+import java.sql.SQLException;
 
 /**
  * @author Grégory Van den Borre
@@ -36,6 +45,24 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan("be.yildizgames.web.webapp.infrastructure.*")
 public class EntryPoint {
+
+    @Value("${dbconfig}")
+    private String databaseConfigFile;
+
+    @Value("${mailconfig}")
+    private String mailConfigFile;
+
+    @Bean
+    public DataBaseConnectionProvider getConnectionProvider() throws SQLException {
+        return new C3P0ConnectionProvider(
+                DataBaseConnectionProvider.DBSystem.MYSQL,
+                new DbFileProperties(databaseConfigFile));
+    }
+
+    @Bean
+    public EmailService emailService() {
+        return new EmailService(new FileEmailProperties(mailConfigFile));
+    }
 
     public static void main(String[] args) {
         ApplicationContext ctx = SpringApplication.run(EntryPoint.class, args);

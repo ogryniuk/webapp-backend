@@ -23,52 +23,27 @@
 //        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //        SOFTWARE.
 
-package be.yildizgames.web.webapp.domain.account;
+package be.yildizgames.web.webapp.infrastructure.controller;
 
 /**
  * @author Grégory Van den Borre
  */
-public class TemporaryAccount {
+public class Redirection {
 
-    private final String login;
+    private final String target;
 
-    private final String password;
+    private final String url;
 
-    private final String email;
-
-    private final String uniquetoken;
-
-
-    public TemporaryAccount(String login, String password, String email, String uniqueToken) {
-        super();
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.uniquetoken = uniqueToken;
+    public Redirection(String target, String url) {
+        this.target = target;
+        this.url = url;
     }
 
-    public static TemporaryAccount create(TemporaryAccountIdProvider provider, String login, String password, String email) {
-        String token = provider.getNewId(login, password, email);
-        return new TemporaryAccount(login, password, email, token);
+    public String getTarget() {
+        return target;
     }
 
-
-    public String getLogin() {
-        return login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public boolean validate(String token) {
-        if(!token.equals(this.uniquetoken)) {
-            return false;
-        }
-        return true;
+    public String getUrl() {
+        return url;
     }
 }
