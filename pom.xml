@@ -37,6 +37,11 @@
       <version>1.4.2.RELEASE</version>
     </dependency>
     <dependency>
+      <groupId>be.yildiz-games</groupId>
+      <artifactId>module-database</artifactId>
+      <version>1.0.3-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>io.reactivex</groupId>
       <artifactId>rxjava</artifactId>
       <version>1.2.3</version>
@@ -62,4 +67,76 @@
       <artifactId>mockito-all</artifactId>
     </dependency>
   </dependencies>
+
+  <build>
+    <finalName>webapp-backend</finalName>
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>be.yildizgames.web.webapp.EntryPoint</mainClass>
+            </manifest>
+          </archive>
+          <appendAssemblyId>false</appendAssemblyId>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.spotify</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <configuration>
+          <serverId>docker-hub</serverId>
+          <imageName>moussavdb/yildiz-webapp-backend:latest</imageName>
+          <baseImage>openjdk</baseImage>
+          <runs>
+            <run>
+              mkdir /yildiz
+            </run>
+          </runs>
+          <entryPoint>["java", "-jar", "/webapp-backend.jar", "--dbconfig=/yildiz/database.properties", "--mailconfig=/yildiz/email.properties"]</entryPoint>
+          <forceTags>true</forceTags>
+          <imageTags>
+            <imageTag>${project.version}</imageTag>
+            <imageTag>latest</imageTag>
+          </imageTags>
+          <resources>
+            <resource>
+              <targetPath>/</targetPath>
+              <directory>${project.build.directory}</directory>
+              <include>webapp-backend.jar</include>
+            </resource>
+          </resources>
+        </configuration>
+        <executions>
+          <execution>
+            <id>build-image</id>
+            <phase>package</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>deploy-image</id>
+            <phase>deploy</phase>
+            <goals>
+              <goal>push</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>
