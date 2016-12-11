@@ -30,9 +30,12 @@ import be.yildiz.module.database.DataBaseConnectionProvider;
 import be.yildiz.module.database.DbFileProperties;
 import be.yildizgames.web.webapp.infrastructure.io.EmailService;
 import be.yildizgames.web.webapp.infrastructure.io.FileEmailProperties;
+import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -51,6 +54,25 @@ public class EntryPoint {
 
     @Value("${mailconfig}")
     private String mailConfigFile;
+
+    @Value("${port}")
+    private int port;
+
+    @Bean
+    public EmbeddedServletContainerFactory servletContainer() {
+
+        TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory();
+
+        Connector ajpConnector = new Connector("AJP/1.3");
+        ajpConnector.setProtocol("AJP/1.3");
+        ajpConnector.setPort(port);
+        ajpConnector.setSecure(false);
+        ajpConnector.setAllowTrace(false);
+        ajpConnector.setScheme("http");
+        tomcat.addAdditionalTomcatConnectors(ajpConnector);
+
+        return tomcat;
+    }
 
     @Bean
     public DataBaseConnectionProvider getConnectionProvider() throws SQLException {
