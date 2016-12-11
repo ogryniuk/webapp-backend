@@ -14,6 +14,8 @@
   <artifactId>webapp-backend</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 
+  <packaging>jar</packaging>
+
   <properties>
     <version.bom-junit>1.0.4-SNAPSHOT</version.bom-junit>
   </properties>
@@ -72,24 +74,14 @@
     <finalName>webapp-backend</finalName>
     <plugins>
       <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <configuration>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-          <archive>
-            <manifest>
-              <mainClass>be.yildizgames.web.webapp.EntryPoint</mainClass>
-            </manifest>
-          </archive>
-          <appendAssemblyId>false</appendAssemblyId>
-        </configuration>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>1.4.2.RELEASE</version>
         <executions>
           <execution>
-            <id>make-assembly</id>
             <phase>package</phase>
             <goals>
-              <goal>single</goal>
+              <goal>repackage</goal>
             </goals>
           </execution>
         </executions>
@@ -106,7 +98,7 @@
               mkdir /yildiz
             </run>
           </runs>
-          <entryPoint>["java", "-jar", "/webapp-backend.jar", "--dbconfig=/yildiz/database.properties", "--mailconfig=/yildiz/email.properties"]</entryPoint>
+          <entryPoint>["java", "-jar", "/webapp-backend.jar", "--dbconfig=/yildiz/database.properties", "--mailconfig=/yildiz/email.properties", "--port=9090"]</entryPoint>
           <forceTags>true</forceTags>
           <imageTags>
             <imageTag>${project.version}</imageTag>
