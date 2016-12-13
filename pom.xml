@@ -86,49 +86,59 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>com.spotify</groupId>
-        <artifactId>docker-maven-plugin</artifactId>
-        <configuration>
-          <serverId>docker-hub</serverId>
-          <imageName>moussavdb/yildiz-webapp-backend:latest</imageName>
-          <baseImage>openjdk</baseImage>
-          <runs>
-            <run>
-              mkdir /yildiz
-            </run>
-          </runs>
-          <entryPoint>["java", "-jar", "/webapp-backend.jar", "--dbconfig=/yildiz/database.properties", "--mailconfig=/yildiz/email.properties", "--port=9090"]</entryPoint>
-          <forceTags>true</forceTags>
-          <imageTags>
-            <imageTag>${project.version}</imageTag>
-            <imageTag>latest</imageTag>
-          </imageTags>
-          <resources>
-            <resource>
-              <targetPath>/</targetPath>
-              <directory>${project.build.directory}</directory>
-              <include>webapp-backend.jar</include>
-            </resource>
-          </resources>
-        </configuration>
-        <executions>
-          <execution>
-            <id>build-image</id>
-            <phase>package</phase>
-            <goals>
-              <goal>build</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>deploy-image</id>
-            <phase>deploy</phase>
-            <goals>
-              <goal>push</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>docker</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.spotify</groupId>
+            <artifactId>docker-maven-plugin</artifactId>
+            <configuration>
+              <serverId>docker-hub</serverId>
+              <imageName>moussavdb/yildiz-webapp-backend:latest</imageName>
+              <baseImage>openjdk</baseImage>
+              <runs>
+                <run>
+                  mkdir /yildiz
+                </run>
+              </runs>
+              <entryPoint>["java", "-jar", "/webapp-backend.jar", "--dbconfig=/yildiz/database.properties", "--mailconfig=/yildiz/email.properties", "--port=9090"]</entryPoint>
+              <forceTags>true</forceTags>
+              <imageTags>
+                <imageTag>${project.version}</imageTag>
+                <imageTag>latest</imageTag>
+              </imageTags>
+              <resources>
+                <resource>
+                  <targetPath>/</targetPath>
+                  <directory>${project.build.directory}</directory>
+                  <include>webapp-backend.jar</include>
+                </resource>
+              </resources>
+            </configuration>
+            <executions>
+              <execution>
+                <id>build-image</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>build</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>deploy-image</id>
+                <phase>deploy</phase>
+                <goals>
+                  <goal>push</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
