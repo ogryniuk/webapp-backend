@@ -25,10 +25,49 @@
 
 package be.yildizgames.web.webapp.infrastructure.io;
 
+import org.springframework.stereotype.Service;
+
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 /**
  * @author Grégory Van den Borre
  */
-@FunctionalInterface
-public interface EmailService {
-    void send(EmailTemplate template);
+@Service
+public class JavaMailEmailService implements EmailService {
+
+    private final Session session;
+
+    /**
+     * Mail address.
+     */
+
+    private final String username;
+
+    public JavaMailEmailService(FileEmailProperties properties) {
+        super();
+        this.username = properties.getUser();
+
+
+        this.session = Session.getInstance(properties.getProperties(), new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, properties.getPassword());
+            }
+        });
+    }
+
+    @Override
+    public void send(EmailTemplate template) {
+        try {
+            MimeMessage message = new MimeMessage(this.session);
+            message.setFrom(new InternetAddress(this.username));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(template.getEmail()));
+            message.setSubject(template.getTitle());
+            message.setText(template.getBody());
+            Transport.send(message);
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+        }
+    }
 }
