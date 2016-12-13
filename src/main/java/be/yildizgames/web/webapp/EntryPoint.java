@@ -30,6 +30,7 @@ import be.yildiz.module.database.DataBaseConnectionProvider;
 import be.yildiz.module.database.DbFileProperties;
 import be.yildizgames.web.webapp.infrastructure.io.EmailService;
 import be.yildizgames.web.webapp.infrastructure.io.FileEmailProperties;
+import be.yildizgames.web.webapp.infrastructure.io.JavaMailEmailService;
 import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -65,7 +66,7 @@ public class EntryPoint {
 
         Connector ajpConnector = new Connector("AJP/1.3");
         ajpConnector.setProtocol("AJP/1.3");
-        ajpConnector.setPort(port);
+        ajpConnector.setPort(this.port);
         ajpConnector.setSecure(false);
         ajpConnector.setAllowTrace(false);
         ajpConnector.setScheme("http");
@@ -83,7 +84,7 @@ public class EntryPoint {
 
     @Bean
     public EmailService emailService() {
-        return new EmailService(new FileEmailProperties(mailConfigFile));
+        return new JavaMailEmailService(new FileEmailProperties(mailConfigFile));
     }
 
     public static void main(String[] args) {
