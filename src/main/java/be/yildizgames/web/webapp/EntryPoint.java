@@ -30,7 +30,6 @@ import be.yildiz.module.database.DataBaseConnectionProvider;
 import be.yildiz.module.database.DbFileProperties;
 import be.yildizgames.web.webapp.infrastructure.io.EmailService;
 import be.yildizgames.web.webapp.infrastructure.io.FileEmailProperties;
-import be.yildizgames.web.webapp.infrastructure.io.JavaMailEmailService;
 import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -56,6 +55,9 @@ public class EntryPoint {
     @Value("${mailconfig}")
     private String mailConfigFile;
 
+    /**
+     * AJP port.
+     */
     @Value("${port}")
     private int port;
 
@@ -84,7 +86,13 @@ public class EntryPoint {
 
     @Bean
     public EmailService emailService() {
-        return new JavaMailEmailService(new FileEmailProperties(mailConfigFile));
+        return e -> {};
+        //return new JavaMailEmailService(new FileEmailProperties(mailConfigFile));
+    }
+
+    @Bean
+    public FileEmailProperties e() {
+        return new FileEmailProperties(mailConfigFile);
     }
 
     public static void main(String[] args) {

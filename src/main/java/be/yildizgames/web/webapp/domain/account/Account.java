@@ -25,8 +25,6 @@
 
 package be.yildizgames.web.webapp.domain.account;
 
-import java.util.Date;
-
 /**
  * @author Grégory Van den Borre
  */
@@ -48,12 +46,6 @@ public class Account {
         this.password = password;
         this.email = email;
         this.lastConnectionDate = lastConnectionDate;
-    }
-
-
-    public static Account create(AccountIdProvider provider, TemporaryAccount account) {
-        String id = provider.getNewId(account);
-        return new Account(id, account.getLogin(), account.getLogin(), account.getEmail(), new Date().getTime());
     }
 
     public Account resetPassword() {

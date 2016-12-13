@@ -25,9 +25,6 @@
 
 package be.yildizgames.web.webapp.infrastructure.persistence;
 
-import be.yildizgames.web.webapp.domain.account.Account;
-import be.yildizgames.web.webapp.domain.account.AccountIdProvider;
-import be.yildizgames.web.webapp.domain.account.TemporaryAccount;
 import be.yildizgames.web.webapp.domain.news.InvalidNewsException;
 import be.yildizgames.web.webapp.domain.news.News;
 import be.yildizgames.web.webapp.domain.news.NewsProvider;

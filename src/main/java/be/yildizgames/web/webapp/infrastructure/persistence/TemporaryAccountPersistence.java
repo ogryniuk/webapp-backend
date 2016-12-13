@@ -25,6 +25,7 @@
 
 package be.yildizgames.web.webapp.infrastructure.persistence;
 
+import be.yildiz.common.authentication.HashedPassword;
 import be.yildiz.module.database.DataBaseConnectionProvider;
 import be.yildizgames.web.webapp.domain.account.TemporaryAccount;
 import be.yildizgames.web.webapp.domain.account.TemporaryAccountProvider;
@@ -35,17 +36,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
 import java.util.Optional;
-import java.util.TreeMap;
 
 /**
  * @author Grégory Van den Borre
  */
 @Repository
 public class TemporaryAccountPersistence implements TemporaryAccountProvider {
-
-    private final Map<String, TemporaryAccount> accounts = new TreeMap<>();
 
     private final DataBaseConnectionProvider provider;
 
@@ -74,7 +71,7 @@ public class TemporaryAccountPersistence implements TemporaryAccountProvider {
 
     @Override
     public Optional<TemporaryAccount> findByEmail(String email) {
-        String sql = "SELECT FROM temp_account WHERE email = ?";
+        String sql = "SELECT * FROM temp_account WHERE email = ?";
         try(Connection c = this.provider.getConnection()) {
             try(PreparedStatement stmt = c.prepareStatement(sql)) {
                 stmt.setString(1, email);
@@ -82,7 +79,7 @@ public class TemporaryAccountPersistence implements TemporaryAccountProvider {
                 if(rs.first()) {
                     TemporaryAccount ta = new TemporaryAccount(
                             rs.getString(1),
-                            rs.getString(2),
+                            new HashedPassword(rs.getString(2)),
                             rs.getString(3),
                             rs.getString(4));
                     return Optional.of(ta);
@@ -96,7 +93,7 @@ public class TemporaryAccountPersistence implements TemporaryAccountProvider {
     }
 
     public Optional<TemporaryAccount> findByLogin(String name) {
-        String sql = "SELECT FROM temp_account WHERE login = ?";
+        String sql = "SELECT * FROM temp_account WHERE login = ?";
         try(Connection c = this.provider.getConnection()) {
             try(PreparedStatement stmt = c.prepareStatement(sql)) {
                 stmt.setString(1, name);
@@ -104,7 +101,7 @@ public class TemporaryAccountPersistence implements TemporaryAccountProvider {
                 if(rs.first()) {
                     TemporaryAccount ta = new TemporaryAccount(
                             rs.getString(1),
-                            rs.getString(2),
+                            new HashedPassword(rs.getString(2)),
                             rs.getString(3),
                             rs.getString(4));
                     return Optional.of(ta);

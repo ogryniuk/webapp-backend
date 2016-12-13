@@ -25,6 +25,7 @@
 
 package be.yildizgames.web.webapp.infrastructure.services;
 
+import be.yildiz.common.authentication.Password;
 import be.yildizgames.web.webapp.domain.account.TemporaryAccountIdProvider;
 import be.yildizgames.web.webapp.infrastructure.io.EmailService;
 import be.yildizgames.web.webapp.infrastructure.io.account.TemporaryAccountEmail;
@@ -52,10 +53,10 @@ public class TemporaryAccountService implements TemporaryAccountIdProvider {
 
 
     @Override
-    public String getNewId(String login, String password, String email) {
+    public String getNewId(String login, Password password, String email) {
         String token = UUID.randomUUID().toString();
         //FIXME ensure transactional
-        this.persistence.save(login, password, email, token);
+        this.persistence.save(login, password.getHashedPassword(), email, token);
         this.emailService.send(new TemporaryAccountEmail("fr", login, email, token));
         return token;
     }

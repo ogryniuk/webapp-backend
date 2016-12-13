@@ -25,6 +25,7 @@
 
 package be.yildizgames.web.webapp.infrastructure.controller.account;
 
+import be.yildiz.common.authentication.PasswordToHash;
 import be.yildizgames.web.webapp.domain.account.Account;
 import be.yildizgames.web.webapp.domain.account.TemporaryAccount;
 import be.yildizgames.web.webapp.infrastructure.controller.AjaxResponse;
@@ -63,25 +64,31 @@ public class AccountController {
 
     @RequestMapping(value = "api/v1/accounts/creations", method = RequestMethod.POST)
     public AjaxResponse create(@RequestBody AccountForm form) {
-        TemporaryAccount.create(temporaryAccountService, form.getLogin(), form.getPassword(), form.getEmail());
+        TemporaryAccount.create(temporaryAccountService, form.getLogin(), new PasswordToHash(form.getPassword()), form.getEmail());
         return new AjaxResponse();
     }
 
 
     @RequestMapping("api/v1/accounts/{id}")
     public Account find(@PathVariable String id) {
-        return this.accountPersistence.getById(id);
+        return this.accountPersistence.getById(id).get();
     }
 
     @RequestMapping("api/v1/accounts/validations/logins/unicities")
-    public ResponseEntity<Void> isLoginFree(@RequestParam String name) {
-        int status =  this.accountPersistence.findByLogin(name).isPresent() ? 400 : 200;
+    public ResponseEntity<Void> isLoginFree(@RequestParam String login) {
+        int status =  this.accountPersistence.findByLogin(login).isPresent() ? 400 : 200;
+        if(status == 200) {
+            status = this.temporaryAccountPersistence.findByLogin(login).isPresent() ? 400 : 200;
+        }
         return ResponseEntity.status(status).build();
     }
 
     @RequestMapping("api/v1/accounts/validations/emails/unicities")
-    public ResponseEntity<Void> isEmailFree(@RequestParam String name) {
-        int status =  this.accountPersistence.findByEmail(name).isPresent() ? 400 : 200;
+    public ResponseEntity<Void> isEmailFree(@RequestParam String email) {
+        int status =  this.accountPersistence.findByEmail(email).isPresent() ? 400 : 200;
+        if(status == 200) {
+            status = this.temporaryAccountPersistence.findByEmail(email).isPresent() ? 400 : 200;
+        }
         return ResponseEntity.status(status).build();
     }
 }

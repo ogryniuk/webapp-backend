@@ -25,6 +25,8 @@
 
 package be.yildizgames.web.webapp.domain.account;
 
+import be.yildiz.common.authentication.Password;
+
 /**
  * @author Grégory Van den Borre
  */
@@ -32,14 +34,14 @@ public class TemporaryAccount {
 
     private final String login;
 
-    private final String password;
+    private final Password password;
 
     private final String email;
 
     private final String uniquetoken;
 
 
-    public TemporaryAccount(String login, String password, String email, String uniqueToken) {
+    public TemporaryAccount(String login, Password password, String email, String uniqueToken) {
         super();
         this.login = login;
         this.password = password;
@@ -47,7 +49,7 @@ public class TemporaryAccount {
         this.uniquetoken = uniqueToken;
     }
 
-    public static TemporaryAccount create(TemporaryAccountIdProvider provider, String login, String password, String email) {
+    public static TemporaryAccount create(TemporaryAccountIdProvider provider, String login, Password password, String email) {
         String token = provider.getNewId(login, password, email);
         return new TemporaryAccount(login, password, email, token);
     }
@@ -57,7 +59,7 @@ public class TemporaryAccount {
         return login;
     }
 
-    public String getPassword() {
+    public Password getPassword() {
         return password;
     }
 

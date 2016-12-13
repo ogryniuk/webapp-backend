@@ -25,9 +25,11 @@
 
 package be.yildizgames.web.webapp.domain.account;
 
+import java.util.Optional;
+
 /**
  * @author Grégory Van den Borre
  */
 public interface AccountProvider {
-    Account getById(String id);
+    Optional<Account> getById(String id);
 }

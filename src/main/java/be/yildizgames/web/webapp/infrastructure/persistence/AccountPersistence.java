@@ -25,45 +25,72 @@
 
 package be.yildizgames.web.webapp.infrastructure.persistence;
 
+import be.yildiz.module.database.DataBaseConnectionProvider;
 import be.yildizgames.web.webapp.domain.account.Account;
-import be.yildizgames.web.webapp.domain.account.AccountIdProvider;
 import be.yildizgames.web.webapp.domain.account.AccountProvider;
-import be.yildizgames.web.webapp.domain.account.TemporaryAccount;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
-import java.util.Map;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Optional;
-import java.util.TreeMap;
 
 /**
  * @author Grégory Van den Borre
  */
 @Repository
-public class AccountPersistence implements AccountIdProvider, AccountProvider {
+public class AccountPersistence implements AccountProvider {
 
-    private final Map<String, Account> accounts = new TreeMap<>();
+    private final DataBaseConnectionProvider provider;
 
-    private int currentIndex = 0;
-
-    @Override
-    public String getNewId(TemporaryAccount account) {
-        String index = String.valueOf(currentIndex);
-        currentIndex++;
-        this.accounts.put(index, new Account(index, account.getLogin(), account.getPassword(), account.getEmail(), new Date().getTime()));
-        return index;
+    @Autowired
+    public AccountPersistence(DataBaseConnectionProvider provider) {
+        this.provider = provider;
     }
 
     @Override
-    public Account getById(String id) {
-        return this.accounts.get(id);
+    public Optional<Account> getById(String id) {
+        String sql = "SELECT * FROM account WHERE id = ?";
+        return fromSQL(sql, id);
     }
 
     public Optional<Account> findByLogin(String name) {
-        return Optional.empty();
+            String sql = "SELECT * FROM account WHERE username = ?";
+            return fromSQL(sql, name);
+
     }
 
     public Optional<Account> findByEmail(String email) {
+        String sql = "SELECT * FROM account WHERE email = ?";
+        return fromSQL(sql, email);
+    }
+
+    private Optional<Account> fromSQL(String sql, String param) {
+        try(Connection c = this.provider.getConnection()) {
+            try(PreparedStatement stmt = c.prepareStatement(sql)) {
+                stmt.setString(1, param);
+                ResultSet rs = stmt.executeQuery();
+                if(rs.first()) {
+                    Account a = fromRS(rs);
+                    return Optional.of(a);
+                }
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return Optional.empty();
     }
+
+    private Account fromRS(ResultSet rs) throws SQLException {
+        return new Account(
+                String.valueOf(rs.getInt(1)),
+                rs.getString(2),
+                rs.getString(3),
+                rs.getString(8),
+                rs.getTimestamp(9).getTime());
+    }
+
 }
