@@ -25,7 +25,6 @@
 
 package be.yildizgames.web.webapp.infrastructure.controller.account;
 
-import be.yildiz.common.authentication.PasswordToHash;
 import be.yildizgames.web.webapp.domain.account.Account;
 import be.yildizgames.web.webapp.domain.account.TemporaryAccount;
 import be.yildizgames.web.webapp.infrastructure.controller.AjaxResponse;
@@ -64,7 +63,7 @@ public class AccountController {
 
     @RequestMapping(value = "api/v1/accounts/creations", method = RequestMethod.POST)
     public AjaxResponse create(@RequestBody AccountForm form) {
-        TemporaryAccount.create(temporaryAccountService, form.getLogin(), new PasswordToHash(form.getPassword()), form.getEmail());
+        TemporaryAccount.create(temporaryAccountService, form.getLogin(), , form.getEmail());
         return new AjaxResponse();
     }
 

@@ -54,6 +54,11 @@
       <version>1.5.6</version>
     </dependency>
     <dependency>
+      <groupId>de.svenkubiak</groupId>
+      <artifactId>jBCrypt</artifactId>
+      <version>0.4.1</version>
+    </dependency>
+    <dependency>
       <groupId>be.yildiz-games</groupId>
       <artifactId>bom-junit</artifactId>
       <version>${version.bom-junit}</version>

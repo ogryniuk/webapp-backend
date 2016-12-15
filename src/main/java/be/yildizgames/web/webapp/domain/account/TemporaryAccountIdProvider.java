@@ -25,12 +25,10 @@
 
 package be.yildizgames.web.webapp.domain.account;
 
-import be.yildiz.common.authentication.Password;
-
 /**
  * @author Grégory Van den Borre
  */
 public interface TemporaryAccountIdProvider {
 
-    String getNewId(String login, Password password, String email);
+    String getNewId(String login, String password, String email);
 }
