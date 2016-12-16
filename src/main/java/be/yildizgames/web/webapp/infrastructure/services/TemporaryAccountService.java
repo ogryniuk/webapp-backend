@@ -25,21 +25,22 @@
 
 package be.yildizgames.web.webapp.infrastructure.services;
 
-import be.yildiz.common.authentication.Password;
-import be.yildizgames.web.webapp.domain.account.TemporaryAccountIdProvider;
+import be.yildizgames.web.webapp.domain.account.TemporaryAccount;
+import be.yildizgames.web.webapp.domain.account.TemporaryAccountProvider;
 import be.yildizgames.web.webapp.infrastructure.io.EmailService;
 import be.yildizgames.web.webapp.infrastructure.io.account.TemporaryAccountEmail;
 import be.yildizgames.web.webapp.infrastructure.persistence.TemporaryAccountPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
  * @author Grégory Van den Borre
  */
 @Service
-public class TemporaryAccountService implements TemporaryAccountIdProvider {
+public class TemporaryAccountService implements TemporaryAccountProvider {
 
     private final EmailService emailService;
 
@@ -53,11 +54,21 @@ public class TemporaryAccountService implements TemporaryAccountIdProvider {
 
 
     @Override
-    public String getNewId(String login, Password password, String email) {
+    public String getNewId(String login, String password, String email) {
         String token = UUID.randomUUID().toString();
         //FIXME ensure transactional
-        this.persistence.save(login, password.getHashedPassword(), email, token);
+        this.persistence.save(login, password, email, token);
         this.emailService.send(new TemporaryAccountEmail("fr", login, email, token));
         return token;
+    }
+
+    @Override
+    public Optional<TemporaryAccount> findByEmail(String email) {
+        return this.persistence.findByEmail(email);
+    }
+
+    @Override
+    public Optional<TemporaryAccount> findByLogin(String login) {
+        return this.persistence.findByLogin(login);
     }
 }

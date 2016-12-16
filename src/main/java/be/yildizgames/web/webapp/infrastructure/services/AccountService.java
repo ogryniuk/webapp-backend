@@ -23,52 +23,43 @@
 //        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //        SOFTWARE.
 
-package be.yildizgames.web.webapp.infrastructure.persistence;
+package be.yildizgames.web.webapp.infrastructure.services;
 
-import be.yildiz.module.database.DataBaseConnectionProvider;
 import be.yildizgames.web.webapp.domain.account.Account;
+import be.yildizgames.web.webapp.domain.account.AccountProvider;
+import be.yildizgames.web.webapp.infrastructure.persistence.AccountPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Optional;
 
 /**
  * @author Grégory Van den Borre
  */
-@Repository
-public class AccountPersistence extends AbstractPersistence <Account> {
+@Service
+public class AccountService implements AccountProvider {
+
+
+    private final AccountPersistence persistence;
 
     @Autowired
-    public AccountPersistence(DataBaseConnectionProvider provider) {
-        super(provider);
-    }
-
-    public Optional<Account> getById(String id) {
-        String sql = "SELECT * FROM account WHERE id = ?";
-        return fromSQL(sql, id);
-    }
-
-    public Optional<Account> findByLogin(String name) {
-            String sql = "SELECT * FROM account WHERE username = ?";
-            return fromSQL(sql, name);
-
-    }
-
-    public Optional<Account> findByEmail(String email) {
-        String sql = "SELECT * FROM account WHERE email = ?";
-        return fromSQL(sql, email);
+    public AccountService(AccountPersistence persistence) {
+        super();
+        this.persistence = persistence;
     }
 
     @Override
-    protected Account fromRS(ResultSet rs) throws SQLException {
-        return new Account(
-                String.valueOf(rs.getInt(1)),
-                rs.getString(2),
-                rs.getString(3),
-                rs.getString(8),
-                rs.getTimestamp(9).getTime());
+    public Optional<Account> getById(String id) {
+        return persistence.getById(id);
     }
 
+    @Override
+    public Optional<Account> findByLogin(String login) {
+        return persistence.findByLogin(login);
+    }
+
+    @Override
+    public Optional<Account> findByEmail(String email) {
+        return persistence.findByEmail(email);
+    }
 }

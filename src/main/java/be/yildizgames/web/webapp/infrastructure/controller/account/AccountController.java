@@ -28,10 +28,10 @@ package be.yildizgames.web.webapp.infrastructure.controller.account;
 import be.yildizgames.web.webapp.domain.account.Account;
 import be.yildizgames.web.webapp.domain.account.TemporaryAccount;
 import be.yildizgames.web.webapp.infrastructure.controller.AjaxResponse;
-import be.yildizgames.web.webapp.infrastructure.io.EmailService;
-import be.yildizgames.web.webapp.infrastructure.persistence.AccountPersistence;
 import be.yildizgames.web.webapp.infrastructure.persistence.TemporaryAccountPersistence;
+import be.yildizgames.web.webapp.infrastructure.services.AccountService;
 import be.yildizgames.web.webapp.infrastructure.services.TemporaryAccountService;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,39 +43,41 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class AccountController {
 
-    private final AccountPersistence accountPersistence;
+    private final AccountService accountService;
 
     private final TemporaryAccountService temporaryAccountService;
 
     private final TemporaryAccountPersistence temporaryAccountPersistence;
 
-    private final EmailService emailService;
-
 
     @Autowired
-    public AccountController(AccountPersistence accountPersistence, TemporaryAccountService temporaryAccountService, TemporaryAccountPersistence temporaryAccountPersistence, EmailService emailService) {
+    public AccountController(AccountService accountService, TemporaryAccountService temporaryAccountService, TemporaryAccountPersistence temporaryAccountPersistence) {
         super();
-        this.accountPersistence = accountPersistence;
+        this.accountService = accountService;
         this.temporaryAccountService = temporaryAccountService;
         this.temporaryAccountPersistence = temporaryAccountPersistence;
-        this.emailService = emailService;
     }
 
     @RequestMapping(value = "api/v1/accounts/creations", method = RequestMethod.POST)
     public AjaxResponse create(@RequestBody AccountForm form) {
-        TemporaryAccount.create(temporaryAccountService, form.getLogin(), , form.getEmail());
+        TemporaryAccount.create(
+                temporaryAccountService,
+                accountService,
+                form.getLogin(),
+                BCrypt.hashpw(form.getPassword(), BCrypt.gensalt()),
+                form.getEmail());
         return new AjaxResponse();
     }
 
 
     @RequestMapping("api/v1/accounts/{id}")
     public Account find(@PathVariable String id) {
-        return this.accountPersistence.getById(id).get();
+        return this.accountService.getById(id).get();
     }
 
     @RequestMapping("api/v1/accounts/validations/logins/unicities")
     public ResponseEntity<Void> isLoginFree(@RequestParam String login) {
-        int status =  this.accountPersistence.findByLogin(login).isPresent() ? 400 : 200;
+        int status =  this.accountService.findByLogin(login).isPresent() ? 400 : 200;
         if(status == 200) {
             status = this.temporaryAccountPersistence.findByLogin(login).isPresent() ? 400 : 200;
         }
@@ -84,7 +86,7 @@ public class AccountController {
 
     @RequestMapping("api/v1/accounts/validations/emails/unicities")
     public ResponseEntity<Void> isEmailFree(@RequestParam String email) {
-        int status =  this.accountPersistence.findByEmail(email).isPresent() ? 400 : 200;
+        int status =  this.accountService.findByEmail(email).isPresent() ? 400 : 200;
         if(status == 200) {
             status = this.temporaryAccountPersistence.findByEmail(email).isPresent() ? 400 : 200;
         }

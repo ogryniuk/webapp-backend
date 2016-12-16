@@ -26,9 +26,6 @@
 package be.yildizgames.web.webapp.infrastructure.persistence;
 
 import be.yildiz.module.database.DataBaseConnectionProvider;
-import be.yildizgames.web.webapp.domain.account.TemporaryAccount;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -39,50 +36,32 @@ import java.util.Optional;
 /**
  * @author Grégory Van den Borre
  */
-@Repository
-public class TemporaryAccountPersistence extends AbstractPersistence<TemporaryAccount>{
+abstract class AbstractPersistence <T> {
 
     private final DataBaseConnectionProvider provider;
 
-    @Autowired
-    public TemporaryAccountPersistence(DataBaseConnectionProvider provider) {
-        super(provider);
+    public AbstractPersistence(DataBaseConnectionProvider provider) {
+        super();
         this.provider = provider;
     }
 
-    @Override
-    protected TemporaryAccount fromRS(ResultSet rs) throws SQLException {
-        return new TemporaryAccount(
-                rs.getString(1),
-                rs.getString(2),
-                rs.getString(3),
-                rs.getString(4));
-    }
-
-    public void save(String login, String password, String email, String token) {
-        String sql = "INSERT INTO temp_account " +
-                "(login, password, email, check_value)" +
-                " VALUES (?,?,?,?)";
+    protected final Optional<T> fromSQL(String sql, String param) {
         try(Connection c = this.provider.getConnection()) {
             try(PreparedStatement stmt = c.prepareStatement(sql)) {
-                stmt.setString(1, login);
-                stmt.setString(2, password);
-                stmt.setString(3, email);
-                stmt.setString(4, token);
-                stmt.executeUpdate();
+                stmt.setString(1, param);
+                ResultSet rs = stmt.executeQuery();
+                if(rs.first()) {
+                    T a = fromRS(rs);
+                    return Optional.of(a);
+                }
+                return Optional.empty();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return Optional.empty();
     }
 
-    public Optional<TemporaryAccount> findByEmail(String email) {
-        String sql = "SELECT * FROM temp_account WHERE email = ?";
-        return fromSQL(sql, email);
-    }
 
-    public Optional<TemporaryAccount> findByLogin(String login) {
-        String sql = "SELECT * FROM temp_account WHERE login = ?";
-        return fromSQL(sql, login);
-    }
+    protected abstract T fromRS(ResultSet rs) throws SQLException;
 }
