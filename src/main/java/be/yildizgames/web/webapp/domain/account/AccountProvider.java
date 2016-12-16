@@ -32,4 +32,8 @@ import java.util.Optional;
  */
 public interface AccountProvider {
     Optional<Account> getById(String id);
+
+    Optional<Account> findByLogin(String login);
+
+    Optional<Account> findByEmail(String email);
 }

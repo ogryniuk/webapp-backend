@@ -25,10 +25,19 @@
 
 package be.yildizgames.web.webapp.domain.account;
 
+import be.yildiz.common.authentication.AuthenticationChecker;
+import be.yildiz.common.authentication.AuthenticationRules;
+import be.yildiz.common.authentication.CredentialException;
+import be.yildizgames.web.webapp.domain.account.exception.AccountValidationException;
+import be.yildizgames.web.webapp.domain.account.exception.EmailExistsValidationException;
+import be.yildizgames.web.webapp.domain.account.exception.LoginExistsValidationException;
+
 /**
  * @author Grégory Van den Borre
  */
 public class TemporaryAccount {
+
+    private static final AuthenticationChecker checker = new AuthenticationChecker(AuthenticationRules.DEFAULT);
 
     private final String login;
 
@@ -36,7 +45,7 @@ public class TemporaryAccount {
 
     private final String email;
 
-    private final String uniquetoken;
+    private final String uniqueToken;
 
 
     public TemporaryAccount(String login, String password, String email, String uniqueToken) {
@@ -44,12 +53,33 @@ public class TemporaryAccount {
         this.login = login;
         this.password = password;
         this.email = email;
-        this.uniquetoken = uniqueToken;
+        this.uniqueToken = uniqueToken;
     }
 
-    public static TemporaryAccount create(TemporaryAccountIdProvider provider, String login, String password, String email) {
+    public static TemporaryAccount create(TemporaryAccountProvider provider, AccountProvider accountProvider, String login, String password, String email) {
+        validate(provider, accountProvider, login, password, email);
         String token = provider.getNewId(login, password, email);
         return new TemporaryAccount(login, password, email, token);
+    }
+
+    private static void validate(TemporaryAccountProvider tempProvider, AccountProvider accountProvider, String login, String password, String email) {
+        try {
+            checker.check(login, password);
+        } catch (CredentialException e) {
+            throw new AccountValidationException(e.getErrors());
+        }
+        if(accountProvider.findByLogin(login).isPresent()) {
+            throw new LoginExistsValidationException();
+        }
+        if(accountProvider.findByEmail(email).isPresent()) {
+            throw new EmailExistsValidationException();
+        }
+        if(tempProvider.findByLogin(login).isPresent()) {
+            throw new LoginExistsValidationException();
+        }
+        if(tempProvider.findByEmail(email).isPresent()) {
+            throw new EmailExistsValidationException();
+        }
     }
 
 
@@ -66,7 +96,7 @@ public class TemporaryAccount {
     }
 
     public boolean validate(String token) {
-        if(!token.equals(this.uniquetoken)) {
+        if(!token.equals(this.uniqueToken)) {
             return false;
         }
         return true;

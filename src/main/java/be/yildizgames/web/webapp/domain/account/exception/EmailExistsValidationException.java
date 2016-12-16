@@ -23,16 +23,10 @@
 //        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //        SOFTWARE.
 
-package be.yildizgames.web.webapp.domain.account;
-
-import java.util.Optional;
+package be.yildizgames.web.webapp.domain.account.exception;
 
 /**
  * @author Grégory Van den Borre
  */
-public interface TemporaryAccountProvider extends TemporaryAccountIdProvider {
-
-    Optional<TemporaryAccount> findByEmail(String email);
-
-    Optional<TemporaryAccount> findByLogin(String login);
+public class EmailExistsValidationException extends RuntimeException {
 }

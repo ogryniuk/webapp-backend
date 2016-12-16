@@ -23,16 +23,27 @@
 //        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //        SOFTWARE.
 
-package be.yildizgames.web.webapp.domain.account;
+package be.yildizgames.web.webapp.domain.account.exception;
 
-import java.util.Optional;
+import be.yildiz.common.authentication.AuthenticationChecker;
+import be.yildiz.common.collections.Lists;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Grégory Van den Borre
  */
-public interface TemporaryAccountProvider extends TemporaryAccountIdProvider {
+public class AccountValidationException extends RuntimeException {
 
-    Optional<TemporaryAccount> findByEmail(String email);
+    private List<String> errors = Lists.newList();
 
-    Optional<TemporaryAccount> findByLogin(String login);
+    public AccountValidationException(final List<AuthenticationChecker.AuthenticationError> errors) {
+        super();
+        this.errors = errors
+                .stream()
+                .map(e -> e.messageKey)
+                .collect(Collectors.toList());
+    }
+
 }
