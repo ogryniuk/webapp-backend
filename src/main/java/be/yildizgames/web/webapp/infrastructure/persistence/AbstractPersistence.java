@@ -25,6 +25,7 @@
 
 package be.yildizgames.web.webapp.infrastructure.persistence;
 
+import be.yildiz.common.log.Logger;
 import be.yildiz.module.database.DataBaseConnectionProvider;
 
 import java.sql.Connection;
@@ -57,7 +58,7 @@ abstract class AbstractPersistence <T> {
                 return Optional.empty();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.error(e);
         }
         return Optional.empty();
     }

@@ -25,6 +25,7 @@
 
 package be.yildizgames.web.webapp.infrastructure.io;
 
+import be.yildiz.common.log.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
@@ -48,8 +49,6 @@ public class JavaMailEmailService implements EmailService {
     public JavaMailEmailService(FileEmailProperties properties) {
         super();
         this.username = properties.getUser();
-
-
         this.session = Session.getInstance(properties.getProperties(), new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, properties.getPassword());
@@ -67,7 +66,7 @@ public class JavaMailEmailService implements EmailService {
             message.setText(template.getBody());
             Transport.send(message);
         } catch (MessagingException mex) {
-            mex.printStackTrace();
+            Logger.error(mex);
         }
     }
 }

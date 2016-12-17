@@ -30,13 +30,13 @@ import be.yildiz.module.database.DataBaseConnectionProvider;
 import be.yildiz.module.database.DbFileProperties;
 import be.yildizgames.web.webapp.infrastructure.io.EmailService;
 import be.yildizgames.web.webapp.infrastructure.io.FileEmailProperties;
+import be.yildizgames.web.webapp.infrastructure.io.JavaMailEmailService;
 import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -81,21 +81,15 @@ public class EntryPoint {
     public DataBaseConnectionProvider getConnectionProvider() throws SQLException {
         return new C3P0ConnectionProvider(
                 DataBaseConnectionProvider.DBSystem.MYSQL,
-                new DbFileProperties(databaseConfigFile));
+                new DbFileProperties(this.databaseConfigFile));
     }
 
     @Bean
     public EmailService emailService() {
-        return e -> {};
-        //return new JavaMailEmailService(new FileEmailProperties(mailConfigFile));
-    }
-
-    @Bean
-    public FileEmailProperties e() {
-        return new FileEmailProperties(mailConfigFile);
+        return new JavaMailEmailService(new FileEmailProperties(this.mailConfigFile));
     }
 
     public static void main(String[] args) {
-        ApplicationContext ctx = SpringApplication.run(EntryPoint.class, args);
+        SpringApplication.run(EntryPoint.class, args);
     }
 }
