@@ -27,6 +27,7 @@ package be.yildizgames.web.webapp.infrastructure.services;
 
 import be.yildizgames.web.webapp.domain.account.Account;
 import be.yildizgames.web.webapp.domain.account.AccountProvider;
+import be.yildizgames.web.webapp.domain.account.exception.AccountNoFoundException;
 import be.yildizgames.web.webapp.infrastructure.persistence.AccountPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,8 +50,8 @@ public class AccountService implements AccountProvider {
     }
 
     @Override
-    public Optional<Account> getById(String id) {
-        return persistence.getById(id);
+    public Account getById(String id) {
+        return persistence.getById(id).orElseThrow(AccountNoFoundException::new);
     }
 
     @Override

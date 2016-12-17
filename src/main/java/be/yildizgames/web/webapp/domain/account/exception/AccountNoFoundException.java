@@ -23,17 +23,10 @@
 //        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //        SOFTWARE.
 
-package be.yildizgames.web.webapp.domain.account;
-
-import java.util.Optional;
+package be.yildizgames.web.webapp.domain.account.exception;
 
 /**
  * @author Grégory Van den Borre
  */
-public interface AccountProvider {
-    Account getById(String id);
-
-    Optional<Account> findByLogin(String login);
-
-    Optional<Account> findByEmail(String email);
+public class AccountNoFoundException extends RuntimeException {
 }

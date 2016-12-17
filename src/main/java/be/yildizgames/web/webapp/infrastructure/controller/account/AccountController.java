@@ -72,7 +72,7 @@ public class AccountController {
 
     @RequestMapping("api/v1/accounts/{id}")
     public Account find(@PathVariable String id) {
-        return this.accountService.getById(id).get();
+        return this.accountService.getById(id);
     }
 
     @RequestMapping("api/v1/accounts/validations/logins/unicities")

@@ -25,6 +25,7 @@
 
 package be.yildizgames.web.webapp.infrastructure.persistence;
 
+import be.yildiz.common.log.Logger;
 import be.yildiz.module.database.DataBaseConnectionProvider;
 import be.yildizgames.web.webapp.domain.account.TemporaryAccount;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +73,7 @@ public class TemporaryAccountPersistence extends AbstractPersistence<TemporaryAc
                 stmt.executeUpdate();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.error(e);
         }
     }
 
