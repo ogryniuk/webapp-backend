@@ -23,10 +23,14 @@
 //        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //        SOFTWARE.
 
-package be.yildizgames.web.webapp.domain;
+package be.yildizgames.web.webapp.domain.account;
 
 /**
  * @author Grégory Van den Borre
  */
-public class Entity {
+public class TempAccountTest {
+
+    public static TemporaryAccount givenATempAccount() {
+        return new TemporaryAccount("me", "myPass", "me@me.com", "1234");
+    }
 }

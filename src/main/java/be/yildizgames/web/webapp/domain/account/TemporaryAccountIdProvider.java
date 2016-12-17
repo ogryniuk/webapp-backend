@@ -28,6 +28,7 @@ package be.yildizgames.web.webapp.domain.account;
 /**
  * @author Grégory Van den Borre
  */
+@FunctionalInterface
 public interface TemporaryAccountIdProvider {
 
     String getNewId(String login, String password, String email);

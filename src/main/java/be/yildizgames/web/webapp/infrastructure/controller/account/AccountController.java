@@ -28,7 +28,6 @@ package be.yildizgames.web.webapp.infrastructure.controller.account;
 import be.yildizgames.web.webapp.domain.account.Account;
 import be.yildizgames.web.webapp.domain.account.TemporaryAccount;
 import be.yildizgames.web.webapp.infrastructure.controller.AjaxResponse;
-import be.yildizgames.web.webapp.infrastructure.persistence.TemporaryAccountPersistence;
 import be.yildizgames.web.webapp.infrastructure.services.AccountService;
 import be.yildizgames.web.webapp.infrastructure.services.TemporaryAccountService;
 import org.mindrot.jbcrypt.BCrypt;
@@ -47,15 +46,12 @@ public class AccountController {
 
     private final TemporaryAccountService temporaryAccountService;
 
-    private final TemporaryAccountPersistence temporaryAccountPersistence;
-
 
     @Autowired
-    public AccountController(AccountService accountService, TemporaryAccountService temporaryAccountService, TemporaryAccountPersistence temporaryAccountPersistence) {
+    public AccountController(AccountService accountService, TemporaryAccountService temporaryAccountService) {
         super();
         this.accountService = accountService;
         this.temporaryAccountService = temporaryAccountService;
-        this.temporaryAccountPersistence = temporaryAccountPersistence;
     }
 
     @RequestMapping(value = "api/v1/accounts/creations", method = RequestMethod.POST)
@@ -76,19 +72,19 @@ public class AccountController {
     }
 
     @RequestMapping("api/v1/accounts/validations/logins/unicities")
-    public ResponseEntity<Void> isLoginFree(@RequestParam String login) {
+    public ResponseEntity<Void> isLoginAvailable(@RequestParam String login) {
         int status =  this.accountService.findByLogin(login).isPresent() ? 400 : 200;
         if(status == 200) {
-            status = this.temporaryAccountPersistence.findByLogin(login).isPresent() ? 400 : 200;
+            status = this.temporaryAccountService.findByLogin(login).isPresent() ? 400 : 200;
         }
         return ResponseEntity.status(status).build();
     }
 
     @RequestMapping("api/v1/accounts/validations/emails/unicities")
-    public ResponseEntity<Void> isEmailFree(@RequestParam String email) {
+    public ResponseEntity<Void> isEmailAvailable(@RequestParam String email) {
         int status =  this.accountService.findByEmail(email).isPresent() ? 400 : 200;
         if(status == 200) {
-            status = this.temporaryAccountPersistence.findByEmail(email).isPresent() ? 400 : 200;
+            status = this.temporaryAccountService.findByEmail(email).isPresent() ? 400 : 200;
         }
         return ResponseEntity.status(status).build();
     }

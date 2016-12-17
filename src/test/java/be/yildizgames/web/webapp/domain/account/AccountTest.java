@@ -31,7 +31,7 @@ package be.yildizgames.web.webapp.domain.account;
 public class AccountTest {
 
     public static Account givenAnAccount() {
-        return null;
+        return new Account("01", "me", "myPass", "me@me.com", 100);
     }
 
 }

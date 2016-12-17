@@ -44,10 +44,6 @@ public class FileEmailProperties {
         this.properties = PropertiesHelper.getPropertiesFromFile(new File(path));
         this.login = properties.getProperty("mail.login");
         this.password = properties.getProperty("mail.password");
-        /*this.database = properties.getProperty("mail.smtp.auth");
-        this.host = properties.getProperty("mail.smtp.starttls.enable");
-        this.host = properties.getProperty("mail.smtp.host");
-        this.host = properties.getProperty("mail.smtp.port");*/
     }
 
     public Properties getProperties() {
