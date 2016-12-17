@@ -66,7 +66,7 @@ public class TemporaryAccount {
         try {
             checker.check(login, password);
         } catch (CredentialException e) {
-            throw new AccountValidationException(e.getErrors());
+            throw new AccountValidationException(e);
         }
         if(accountProvider.findByLogin(login).isPresent()) {
             throw new LoginExistsValidationException();

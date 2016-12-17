@@ -25,8 +25,9 @@
 
 package be.yildizgames.web.webapp.domain.account.exception;
 
-import be.yildiz.common.authentication.AuthenticationChecker;
+import be.yildiz.common.authentication.CredentialException;
 import be.yildiz.common.collections.Lists;
+import lombok.Getter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,11 +37,12 @@ import java.util.stream.Collectors;
  */
 public class AccountValidationException extends RuntimeException {
 
+    @Getter
     private List<String> errors = Lists.newList();
 
-    public AccountValidationException(final List<AuthenticationChecker.AuthenticationError> errors) {
+    public AccountValidationException(final CredentialException ex) {
         super();
-        this.errors = errors
+        this.errors = ex.getErrors()
                 .stream()
                 .map(e -> e.messageKey)
                 .collect(Collectors.toList());
