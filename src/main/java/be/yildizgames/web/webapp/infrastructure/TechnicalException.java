@@ -23,47 +23,10 @@
 //        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //        SOFTWARE.
 
-package be.yildizgames.web.webapp.infrastructure.persistence;
-
-import be.yildiz.common.log.Logger;
-import be.yildiz.module.database.DataBaseConnectionProvider;
-import be.yildizgames.web.webapp.infrastructure.TechnicalException;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Optional;
+package be.yildizgames.web.webapp.infrastructure;
 
 /**
  * @author Grégory Van den Borre
  */
-abstract class AbstractPersistence <T> {
-
-    private final DataBaseConnectionProvider provider;
-
-    public AbstractPersistence(DataBaseConnectionProvider provider) {
-        super();
-        this.provider = provider;
-    }
-
-    protected final Optional<T> fromSQL(String sql, String param) {
-        try(Connection c = this.provider.getConnection()) {
-            try(PreparedStatement stmt = c.prepareStatement(sql)) {
-                stmt.setString(1, param);
-                ResultSet rs = stmt.executeQuery();
-                if(rs.first()) {
-                    T a = fromRS(rs);
-                    return Optional.of(a);
-                }
-                return Optional.empty();
-            }
-        } catch (SQLException e) {
-            Logger.error(e);
-            throw new TechnicalException();
-        }
-    }
-
-
-    protected abstract T fromRS(ResultSet rs) throws SQLException;
+public class TechnicalException extends RuntimeException {
 }

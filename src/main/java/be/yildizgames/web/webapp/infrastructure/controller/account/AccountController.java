@@ -25,12 +25,13 @@
 
 package be.yildizgames.web.webapp.infrastructure.controller.account;
 
+import be.yildiz.common.collections.Lists;
 import be.yildizgames.web.webapp.domain.account.Account;
 import be.yildizgames.web.webapp.domain.account.TemporaryAccount;
 import be.yildizgames.web.webapp.infrastructure.controller.AjaxResponse;
+import be.yildizgames.web.webapp.infrastructure.controller.Notification;
 import be.yildizgames.web.webapp.infrastructure.services.AccountService;
 import be.yildizgames.web.webapp.infrastructure.services.TemporaryAccountService;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,13 +57,17 @@ public class AccountController {
 
     @RequestMapping(value = "api/v1/accounts/creations", method = RequestMethod.POST)
     public AjaxResponse create(@RequestBody AccountForm form) {
-        TemporaryAccount.create(
-                temporaryAccountService,
-                accountService,
-                form.getLogin(),
-                BCrypt.hashpw(form.getPassword(), BCrypt.gensalt()),
-                form.getEmail());
-        return new AjaxResponse();
+            TemporaryAccount.create(
+                    temporaryAccountService,
+                    accountService,
+                    form.getLogin(),
+                    form.getPassword(),
+                    form.getEmail());
+            return new AjaxResponse(Lists.newList(
+                    new Notification(
+                            "account.creation.success.title",
+                            "account.creation.success.content",
+                            "success")));
     }
 
 

@@ -27,7 +27,9 @@ package be.yildizgames.web.webapp.infrastructure.controller;
 
 import be.yildizgames.web.webapp.domain.account.AccountTest;
 import be.yildizgames.web.webapp.domain.account.TempAccountTest;
+import be.yildizgames.web.webapp.domain.account.exception.AccountValidationException;
 import be.yildizgames.web.webapp.infrastructure.controller.account.AccountController;
+import be.yildizgames.web.webapp.infrastructure.controller.account.AccountForm;
 import be.yildizgames.web.webapp.infrastructure.services.AccountService;
 import be.yildizgames.web.webapp.infrastructure.services.TemporaryAccountService;
 import org.junit.Assert;
@@ -50,6 +52,12 @@ public class AccountControllerTest {
     private static final String NOT_AVAILABLE = "not-available";
 
     private static final String NOT_AVAILABLE_IN_TEMP = "not-available-in-temp";
+
+    private static final String EMAIL_AVAILABLE = "available@test.com";
+
+    private static final String EMAIL_NOT_AVAILABLE = "notavailable@test.com";
+
+    private static final String EMAIL_NOT_AVAILABLE_IN_TEMP = "notavailabletemp@test.com";
 
     public static class IsLoginAvailable {
 
@@ -91,14 +99,14 @@ public class AccountControllerTest {
 
         @Test
         public void happyFlow() {
-            givenAnAccountController().isEmailAvailable(AVAILABLE);
+            givenAnAccountController().isEmailAvailable(EMAIL_AVAILABLE);
         }
 
         @Test
         public void available() {
             AccountController a = givenAnAccountController();
 
-            ResponseEntity<Void> r = a.isEmailAvailable(AVAILABLE);
+            ResponseEntity<Void> r = a.isEmailAvailable(EMAIL_AVAILABLE);
 
             Assert.assertEquals(200, r.getStatusCode().value());
         }
@@ -107,7 +115,7 @@ public class AccountControllerTest {
         public void notAvailableInTempAccount() {
             AccountController a = givenAnAccountController();
 
-            ResponseEntity<Void> r = a.isEmailAvailable(NOT_AVAILABLE_IN_TEMP);
+            ResponseEntity<Void> r = a.isEmailAvailable(EMAIL_NOT_AVAILABLE_IN_TEMP);
 
             Assert.assertEquals(400, r.getStatusCode().value());
         }
@@ -116,11 +124,80 @@ public class AccountControllerTest {
         public void notAvailableInAccount() {
             AccountController a = givenAnAccountController();
 
-            ResponseEntity<Void> r = a.isEmailAvailable(NOT_AVAILABLE);
+            ResponseEntity<Void> r = a.isEmailAvailable(EMAIL_NOT_AVAILABLE);
 
             Assert.assertEquals(400, r.getStatusCode().value());
         }
 
+    }
+
+    public static class Create {
+
+        @Test
+        public void happyFlow() {
+            AccountController a = givenAnAccountController();
+            AccountForm f = new AccountForm();
+            f.setLogin(AVAILABLE);
+            f.setPassword("azerty");
+            f.setEmail(EMAIL_AVAILABLE);
+
+            a.create(f);
+        }
+
+        @Test(expected = AccountValidationException.class)
+        public void WithNullLogin() {
+            AccountController a = givenAnAccountController();
+            AccountForm f = new AccountForm();
+            f.setLogin(null);
+            f.setPassword("azerty");
+            f.setEmail(EMAIL_AVAILABLE);
+
+            a.create(f);
+        }
+
+        @Test(expected = AccountValidationException.class)
+        public void withNullPassword() {
+            AccountController a = givenAnAccountController();
+            AccountForm f = new AccountForm();
+            f.setLogin(AVAILABLE);
+            f.setPassword(null);
+            f.setEmail(EMAIL_AVAILABLE);
+
+            a.create(f);
+        }
+
+        @Test(expected = AccountValidationException.class)
+        public void withNullEmail() {
+            AccountController a = givenAnAccountController();
+            AccountForm f = new AccountForm();
+            f.setLogin(AVAILABLE);
+            f.setPassword("azerty");
+            f.setEmail(null);
+
+            a.create(f);
+        }
+
+        @Test(expected = AccountValidationException.class)
+        public void withInvalidLogin() {
+            AccountController a = givenAnAccountController();
+            AccountForm f = new AccountForm();
+            f.setLogin("ab");
+            f.setPassword("azerty");
+            f.setEmail(EMAIL_AVAILABLE);
+
+            a.create(f);
+        }
+
+        @Test(expected = AccountValidationException.class)
+        public void withInvalidPassword() {
+            AccountController a = givenAnAccountController();
+            AccountForm f = new AccountForm();
+            f.setLogin(AVAILABLE);
+            f.setPassword("az");
+            f.setEmail(EMAIL_AVAILABLE);
+
+            a.create(f);
+        }
     }
 
     private static AccountController givenAnAccountController() {
@@ -133,9 +210,9 @@ public class AccountControllerTest {
         Mockito.when(as.findByLogin(NOT_AVAILABLE)).thenReturn(Optional.of(AccountTest.givenAnAccount()));
         Mockito.when(as.findByLogin(NOT_AVAILABLE_IN_TEMP)).thenReturn(Optional.empty());
 
-        Mockito.when(as.findByEmail(AVAILABLE)).thenReturn(Optional.empty());
-        Mockito.when(as.findByEmail(NOT_AVAILABLE)).thenReturn(Optional.of(AccountTest.givenAnAccount()));
-        Mockito.when(as.findByEmail(NOT_AVAILABLE_IN_TEMP)).thenReturn(Optional.empty());
+        Mockito.when(as.findByEmail(EMAIL_AVAILABLE)).thenReturn(Optional.empty());
+        Mockito.when(as.findByEmail(EMAIL_NOT_AVAILABLE)).thenReturn(Optional.of(AccountTest.givenAnAccount()));
+        Mockito.when(as.findByEmail(EMAIL_NOT_AVAILABLE_IN_TEMP)).thenReturn(Optional.empty());
         return as;
     }
 
@@ -145,9 +222,9 @@ public class AccountControllerTest {
         Mockito.when(tas.findByLogin(NOT_AVAILABLE)).thenReturn(Optional.empty());
         Mockito.when(tas.findByLogin(NOT_AVAILABLE_IN_TEMP)).thenReturn(Optional.of(TempAccountTest.givenATempAccount()));
 
-        Mockito.when(tas.findByEmail(AVAILABLE)).thenReturn(Optional.empty());
-        Mockito.when(tas.findByEmail(NOT_AVAILABLE)).thenReturn(Optional.empty());
-        Mockito.when(tas.findByEmail(NOT_AVAILABLE_IN_TEMP)).thenReturn(Optional.of(TempAccountTest.givenATempAccount()));
+        Mockito.when(tas.findByEmail(EMAIL_AVAILABLE)).thenReturn(Optional.empty());
+        Mockito.when(tas.findByEmail(EMAIL_NOT_AVAILABLE)).thenReturn(Optional.empty());
+        Mockito.when(tas.findByEmail(EMAIL_NOT_AVAILABLE_IN_TEMP)).thenReturn(Optional.of(TempAccountTest.givenATempAccount()));
         return tas;
     }
 }

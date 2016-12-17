@@ -30,6 +30,7 @@ import be.yildizgames.web.webapp.domain.account.TemporaryAccountProvider;
 import be.yildizgames.web.webapp.infrastructure.io.EmailService;
 import be.yildizgames.web.webapp.infrastructure.io.account.TemporaryAccountEmail;
 import be.yildizgames.web.webapp.infrastructure.persistence.TemporaryAccountPersistence;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +56,7 @@ public class TemporaryAccountService implements TemporaryAccountProvider {
 
     @Override
     public String getNewId(String login, String password, String email) {
+        password = BCrypt.hashpw(password, BCrypt.gensalt());
         String token = UUID.randomUUID().toString();
         //FIXME ensure transactional
         this.persistence.save(login, password, email, token);

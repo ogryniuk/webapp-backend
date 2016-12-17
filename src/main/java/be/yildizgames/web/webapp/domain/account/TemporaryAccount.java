@@ -68,6 +68,9 @@ public class TemporaryAccount {
         } catch (CredentialException e) {
             throw new AccountValidationException(e);
         }
+        if(email == null) {
+            throw new AccountValidationException("email.mandatory");
+        }
         if(accountProvider.findByLogin(login).isPresent()) {
             throw new LoginExistsValidationException();
         }

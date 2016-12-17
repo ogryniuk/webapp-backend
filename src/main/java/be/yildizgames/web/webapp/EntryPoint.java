@@ -28,9 +28,7 @@ package be.yildizgames.web.webapp;
 import be.yildiz.module.database.C3P0ConnectionProvider;
 import be.yildiz.module.database.DataBaseConnectionProvider;
 import be.yildiz.module.database.DbFileProperties;
-import be.yildizgames.web.webapp.infrastructure.io.EmailService;
 import be.yildizgames.web.webapp.infrastructure.io.FileEmailProperties;
-import be.yildizgames.web.webapp.infrastructure.io.JavaMailEmailService;
 import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -84,9 +82,11 @@ public class EntryPoint {
                 new DbFileProperties(this.databaseConfigFile));
     }
 
+
+
     @Bean
-    public EmailService emailService() {
-        return new JavaMailEmailService(new FileEmailProperties(this.mailConfigFile));
+    public FileEmailProperties emailProperties() {
+        return new FileEmailProperties(this.mailConfigFile);
     }
 
     public static void main(String[] args) {

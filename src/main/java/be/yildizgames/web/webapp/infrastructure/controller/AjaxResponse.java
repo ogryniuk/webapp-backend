@@ -38,6 +38,11 @@ public class AjaxResponse {
 
     private final List<Notification> notifications = Lists.newList();
 
+    public AjaxResponse(List<Notification> notifications) {
+        super();
+        this.notifications.addAll(notifications);
+    }
+
     public List<Redirection> getRedirections() {
         return redirections;
     }

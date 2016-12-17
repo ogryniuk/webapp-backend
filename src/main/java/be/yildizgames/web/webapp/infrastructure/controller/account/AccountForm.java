@@ -31,7 +31,9 @@ package be.yildizgames.web.webapp.infrastructure.controller.account;
 public class AccountForm {
 
     private String login;
+
     private String password;
+
     private String email;
 
     public String getLogin() {
