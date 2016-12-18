@@ -77,8 +77,9 @@ public class AccountController {
     }
 
     @RequestMapping("api/v1/accounts/confirmations")
-    public void confirm(@RequestParam String email, @RequestParam String token) {
+    public String confirm(@RequestParam String email, @RequestParam String token) {
         this.temporaryAccountService.confirmAccount(email, token);
+        return "Account confirmed for " + email;
     }
 
     @RequestMapping("api/v1/accounts/validations/logins/unicities")
