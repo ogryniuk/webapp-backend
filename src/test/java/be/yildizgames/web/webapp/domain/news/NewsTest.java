@@ -25,8 +25,6 @@
 
 package be.yildizgames.web.webapp.domain.news;
 
-import be.yildizgames.web.webapp.domain.account.Account;
-import be.yildizgames.web.webapp.domain.account.AccountTest;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
@@ -80,8 +78,12 @@ public class NewsTest {
 
         @Test(expected = InvalidNewsException.class)
         public void withContentTooLong() throws InvalidNewsException {
-            String content = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-            new News(TITLE_OK, content, IMAGE_OK, ACCOUNT_OK);
+            StringBuilder sb = new StringBuilder();
+            for(int i = 0; i <= News.CONTENT_MAX; i++) {
+                sb.append('a');
+            }
+
+            new News(TITLE_OK, sb.toString(), IMAGE_OK, ACCOUNT_OK);
         }
 
         @Test(expected = NullPointerException.class)
