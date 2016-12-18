@@ -26,7 +26,7 @@
 package be.yildizgames.web.webapp.infrastructure.controller;
 
 import be.yildizgames.web.webapp.domain.account.AccountTest;
-import be.yildizgames.web.webapp.domain.account.TempAccountTest;
+import be.yildizgames.web.webapp.domain.account.TemporaryAccountTest;
 import be.yildizgames.web.webapp.domain.account.exception.AccountValidationException;
 import be.yildizgames.web.webapp.infrastructure.controller.account.AccountController;
 import be.yildizgames.web.webapp.infrastructure.controller.account.AccountForm;
@@ -220,11 +220,11 @@ public class AccountControllerTest {
         TemporaryAccountService tas = Mockito.mock(TemporaryAccountService.class);
         Mockito.when(tas.findByLogin(AVAILABLE)).thenReturn(Optional.empty());
         Mockito.when(tas.findByLogin(NOT_AVAILABLE)).thenReturn(Optional.empty());
-        Mockito.when(tas.findByLogin(NOT_AVAILABLE_IN_TEMP)).thenReturn(Optional.of(TempAccountTest.givenATempAccount()));
+        Mockito.when(tas.findByLogin(NOT_AVAILABLE_IN_TEMP)).thenReturn(Optional.of(TemporaryAccountTest.givenATempAccount()));
 
         Mockito.when(tas.findByEmail(EMAIL_AVAILABLE)).thenReturn(Optional.empty());
         Mockito.when(tas.findByEmail(EMAIL_NOT_AVAILABLE)).thenReturn(Optional.empty());
-        Mockito.when(tas.findByEmail(EMAIL_NOT_AVAILABLE_IN_TEMP)).thenReturn(Optional.of(TempAccountTest.givenATempAccount()));
+        Mockito.when(tas.findByEmail(EMAIL_NOT_AVAILABLE_IN_TEMP)).thenReturn(Optional.of(TemporaryAccountTest.givenATempAccount()));
         return tas;
     }
 }

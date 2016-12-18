@@ -25,12 +25,26 @@
 
 package be.yildizgames.web.webapp.domain.account;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 /**
  * @author Grégory Van den Borre
  */
-public class TempAccountTest {
+public class TemporaryAccountTest {
 
     public static TemporaryAccount givenATempAccount() {
         return new TemporaryAccount("me", "myPass", "me@me.com", "1234");
+    }
+
+    public static class Constructor {
+
+        @Test
+        public void happyFlow() {
+            TemporaryAccount ta = givenATempAccount();
+            Assert.assertEquals("me", ta.getLogin());
+            Assert.assertEquals("myPass", ta.getPassword());
+            Assert.assertEquals("me@me.com", ta.getEmail());
+        }
     }
 }
