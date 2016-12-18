@@ -25,8 +25,6 @@
 
 package be.yildizgames.web.webapp.domain.news;
 
-import be.yildizgames.web.webapp.domain.account.Account;
-
 import java.util.Date;
 
 
@@ -41,7 +39,15 @@ public class News implements NewsDto {
 
     public static final int CONTENT_MIN = 1;
 
-    public static final int CONTENT_MAX = 20;
+    public static final int CONTENT_MAX = 255;
+
+    private static final String TITLE_MIN_VALID = "Title must be at least " + TITLE_MIN + " chars.";
+
+    private static final String CONTENT_MIN_VALID = "Content must be at least " + CONTENT_MIN + " chars.";
+
+    private static final String TITLE_MAX_VALID = "Title cannot have more than " + TITLE_MAX + " chars.";
+
+    private static final String CONTENT_MAX_VALID = "Content cannot have more than " + CONTENT_MAX + " chars.";
 
     private final String title;
 
@@ -62,15 +68,16 @@ public class News implements NewsDto {
 
     private News(String title, String content, String image, String author, long creationDate) throws InvalidNewsException {
         super();
+
         if(title.length() < TITLE_MIN) {
-            throw new InvalidNewsException("Title must be at least " + TITLE_MIN + " chars.");
+            throw new InvalidNewsException(TITLE_MIN_VALID);
         } else if(title.length() > TITLE_MAX) {
-            throw new InvalidNewsException("Title cannot be more than " + TITLE_MIN + " chars.");
+            throw new InvalidNewsException(TITLE_MAX_VALID);
         }
         if(content.length() < CONTENT_MIN) {
-            throw new InvalidNewsException("Title must be at least " + TITLE_MIN + " chars.");
+            throw new InvalidNewsException(CONTENT_MIN_VALID);
         } else if(content.length() > CONTENT_MAX) {
-            throw new InvalidNewsException("Title cannot be more than " + TITLE_MIN + " chars.");
+            throw new InvalidNewsException(CONTENT_MAX_VALID);
         }
         if(image == null) {
             throw new NullPointerException("Image is null");
@@ -98,14 +105,17 @@ public class News implements NewsDto {
         return new News(this.title, this.content, newImage, this.author, this.creationDate);
     }
 
+    @Override
     public String getTitle() {
         return this.title;
     }
 
+    @Override
     public String getContent() {
         return content;
     }
 
+    @Override
     public String getImage() {
         return image;
     }
