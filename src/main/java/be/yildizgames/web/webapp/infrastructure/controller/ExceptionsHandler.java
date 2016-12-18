@@ -42,13 +42,17 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ExceptionsHandler {
 
+    private static final String ACCOUNT_VALIDATION_ERROR = "account.validation.error";
+
+    private static final String TYPE_ERROR = "error";
+
     @ExceptionHandler(AccountValidationException.class)
     @ResponseBody
     public AjaxResponse handleValidationException(final AccountValidationException e) {
         return new AjaxResponse(
                 e.getErrors()
                 .stream()
-                .map(error -> new Notification("account.validation.error", error, "error"))
+                .map(error -> new Notification(ACCOUNT_VALIDATION_ERROR, error, TYPE_ERROR))
                 .collect(Collectors.toList()));
     }
 
@@ -56,20 +60,20 @@ public class ExceptionsHandler {
     @ResponseBody
     public AjaxResponse handleLoginExistException(final LoginExistsValidationException e) {
         return new AjaxResponse(Lists.newList(
-                new Notification("account.validation.error", "account.validation.error.login.exists", "error")));
+                new Notification(ACCOUNT_VALIDATION_ERROR, "account.validation.error.login.exists", TYPE_ERROR)));
     }
 
     @ExceptionHandler(EmailExistsValidationException.class)
     @ResponseBody
     public AjaxResponse handleEmailException(final EmailExistsValidationException e) {
         return new AjaxResponse(Lists.newList(
-                new Notification("account.validation.error", "account.validation.error.email.exists", "error")));
+                new Notification(ACCOUNT_VALIDATION_ERROR, "account.validation.error.email.exists", TYPE_ERROR)));
     }
 
     @ExceptionHandler(TechnicalException.class)
     @ResponseBody
     public AjaxResponse handleTechnicalException(final TechnicalException e) {
         return new AjaxResponse(Lists.newList(
-                new Notification("technical.error", "technical.error.content", "error")));
+                new Notification("technical.error", "technical.error.content", TYPE_ERROR)));
     }
 }
