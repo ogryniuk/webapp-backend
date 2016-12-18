@@ -105,9 +105,6 @@ public class TemporaryAccount {
      * @throws NullPointerException if token is null.
      */
     public boolean validate(String token) {
-        if(!token.equals(this.uniqueToken)) {
-            return false;
-        }
-        return true;
+        return token.equals(this.uniqueToken);
     }
 }
