@@ -98,6 +98,12 @@ public class TemporaryAccount {
         return email;
     }
 
+    /**
+     * Check if a given token is the same as the one of this account.
+     * @param token Token to be tested against.
+     * @return true if the provided token match this account.
+     * @throws NullPointerException if token is null.
+     */
     public boolean validate(String token) {
         if(!token.equals(this.uniqueToken)) {
             return false;

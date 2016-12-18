@@ -46,5 +46,40 @@ public class TemporaryAccountTest {
             Assert.assertEquals("myPass", ta.getPassword());
             Assert.assertEquals("me@me.com", ta.getEmail());
         }
+
+        public void withLoginNull() {
+
+        }
+
+        public void withPasswordNull() {
+
+        }
+
+        public void withEmailNull() {
+
+        }
+
+        public void withTokenNull() {
+
+        }
     }
+
+    public static class Validate {
+
+        @Test
+        public void valid() {
+            Assert.assertTrue(givenATempAccount().validate("1234"));
+        }
+
+        @Test
+        public void notValid() {
+            Assert.assertFalse(givenATempAccount().validate("12345"));
+        }
+
+        @Test(expected = NullPointerException.class)
+        public void withNull() {
+            givenATempAccount().validate(null);
+        }
+    }
+
 }
