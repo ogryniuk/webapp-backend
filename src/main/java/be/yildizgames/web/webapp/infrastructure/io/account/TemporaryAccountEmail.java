@@ -44,11 +44,11 @@ public class TemporaryAccountEmail implements EmailTemplate {
         if("fr".equals(language)) {
             this.title = "Yildiz-Online Confirmation de votre compte.";
             this.body = "Cher " + login + ",\n\nVeuillez activer votre compte en cliquant sur le lien suivant:\n\n" +
-                    "https:\\\\www.yildiz-games.be/yildizonline/accounts/confirmations/" + email + "/" + token;
+                    "https:\\\\www.yildiz-games.be/api/v1/accounts/confirmations?email=" + email + "&token=" + token;
         } else {
             this.title = "Yildiz-Online Account confirmation.";
             this.body = "Dear " + login + ",\n\nPlease click on the following link to activate your account:\n\n" +
-                    "https:\\\\www.yildiz-games.be/yildizonline/accounts/confirmations/" + email + "/" + token;
+                    "https:\\www.yildiz-games.be/api/v1/accounts/confirmations?email=" + email + "&token=" + token;
         }
     }
 
