@@ -31,6 +31,7 @@ import be.yildiz.common.authentication.CredentialException;
 import be.yildizgames.web.webapp.domain.account.exception.AccountValidationException;
 import be.yildizgames.web.webapp.domain.account.exception.EmailExistsValidationException;
 import be.yildizgames.web.webapp.domain.account.exception.LoginExistsValidationException;
+import lombok.NonNull;
 
 /**
  * @author Grégory Van den Borre
@@ -48,7 +49,7 @@ public class TemporaryAccount {
     private final String uniqueToken;
 
 
-    public TemporaryAccount(String login, String password, String email, String uniqueToken) {
+    public TemporaryAccount(@NonNull String login, @NonNull String password, @NonNull String email, @NonNull String uniqueToken) {
         super();
         this.login = login;
         this.password = password;
