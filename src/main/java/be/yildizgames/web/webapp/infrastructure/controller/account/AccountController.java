@@ -76,6 +76,11 @@ public class AccountController {
         return this.accountService.getById(id);
     }
 
+    @RequestMapping("api/v1/accounts/confirmations")
+    public void confirm(@RequestParam String email, @RequestParam String token) {
+        this.temporaryAccountService.confirmAccount(email, token);
+    }
+
     @RequestMapping("api/v1/accounts/validations/logins/unicities")
     public ResponseEntity<Void> isLoginAvailable(@RequestParam String login) {
         int status =  this.accountService.findByLogin(login).isPresent() ? 400 : 200;

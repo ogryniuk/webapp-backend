@@ -64,6 +64,13 @@ public class TemporaryAccountService implements TemporaryAccountProvider {
         return token;
     }
 
+    public void confirmAccount(String email, String token) {
+        Optional<TemporaryAccount> found = this.persistence.findByEmail(email);
+        if(found.isPresent() && found.get().validate(token)) {
+            this.persistence.confirm(found.get().getLogin());
+        }
+    }
+
     @Override
     public Optional<TemporaryAccount> findByEmail(String email) {
         return this.persistence.findByEmail(email);

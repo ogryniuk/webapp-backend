@@ -88,4 +88,17 @@ public class TemporaryAccountPersistence extends AbstractPersistence<TemporaryAc
         String sql = "SELECT * FROM temp_account WHERE login = ?";
         return fromSQL(sql, login);
     }
+
+    public void confirm(String login) {
+        String sql = "UPDATE temp_account SET complete=1 WHERE login=?";
+        try(Connection c = this.provider.getConnection()) {
+            try(PreparedStatement stmt = c.prepareStatement(sql)) {
+                stmt.setString(1, login);
+                stmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            Logger.error(e);
+            throw new TechnicalException();
+        }
+    }
 }
