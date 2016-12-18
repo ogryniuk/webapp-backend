@@ -55,11 +55,11 @@ public class TemporaryAccountService implements TemporaryAccountProvider {
 
 
     @Override
-    public String getNewId(String login, String password, String email) {
-        password = BCrypt.hashpw(password, BCrypt.gensalt());
+    public String getNewId(final String login, final String password, final String email) {
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
         String token = UUID.randomUUID().toString();
         //FIXME ensure transactional
-        this.persistence.save(login, password, email, token);
+        this.persistence.save(login, hashedPassword, email, token);
         this.emailService.send(new TemporaryAccountEmail("fr", login, email, token));
         return token;
     }
