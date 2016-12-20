@@ -225,6 +225,8 @@ public class AccountControllerTest {
         Mockito.when(tas.findByEmail(EMAIL_AVAILABLE)).thenReturn(Optional.empty());
         Mockito.when(tas.findByEmail(EMAIL_NOT_AVAILABLE)).thenReturn(Optional.empty());
         Mockito.when(tas.findByEmail(EMAIL_NOT_AVAILABLE_IN_TEMP)).thenReturn(Optional.of(TemporaryAccountTest.givenATempAccount()));
+
+        Mockito.when(tas.getNewId(Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn("1234");
         return tas;
     }
 }
