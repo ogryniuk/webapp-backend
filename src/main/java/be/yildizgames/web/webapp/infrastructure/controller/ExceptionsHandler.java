@@ -30,6 +30,8 @@ import be.yildizgames.web.webapp.domain.account.exception.AccountValidationExcep
 import be.yildizgames.web.webapp.domain.account.exception.EmailExistsValidationException;
 import be.yildizgames.web.webapp.domain.account.exception.LoginExistsValidationException;
 import be.yildizgames.web.webapp.infrastructure.TechnicalException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -48,32 +50,36 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(AccountValidationException.class)
     @ResponseBody
-    public AjaxResponse handleValidationException(final AccountValidationException e) {
-        return new AjaxResponse(
+    public ResponseEntity<AjaxResponse> handleValidationException(final AccountValidationException e) {
+        return this.build(new AjaxResponse(
                 e.getErrors()
-                .stream()
-                .map(error -> new Notification(ACCOUNT_VALIDATION_ERROR, error, TYPE_ERROR))
-                .collect(Collectors.toList()));
+                        .stream()
+                        .map(error -> new Notification(ACCOUNT_VALIDATION_ERROR, error, TYPE_ERROR))
+                        .collect(Collectors.toList())), 422);
     }
 
     @ExceptionHandler(LoginExistsValidationException.class)
     @ResponseBody
-    public AjaxResponse handleLoginExistException(final LoginExistsValidationException e) {
-        return new AjaxResponse(Lists.newList(
-                new Notification(ACCOUNT_VALIDATION_ERROR, "account.validation.error.login.exists", TYPE_ERROR)));
+    public ResponseEntity<AjaxResponse> handleLoginExistException(final LoginExistsValidationException e) {
+        return this.build(new AjaxResponse(Lists.newList(
+                new Notification(ACCOUNT_VALIDATION_ERROR, "account.validation.error.login.exists", TYPE_ERROR))), 422);
     }
 
     @ExceptionHandler(EmailExistsValidationException.class)
     @ResponseBody
-    public AjaxResponse handleEmailException(final EmailExistsValidationException e) {
-        return new AjaxResponse(Lists.newList(
-                new Notification(ACCOUNT_VALIDATION_ERROR, "account.validation.error.email.exists", TYPE_ERROR)));
+    public ResponseEntity<AjaxResponse> handleEmailException(final EmailExistsValidationException e) {
+        return this.build(new AjaxResponse(Lists.newList(
+                new Notification(ACCOUNT_VALIDATION_ERROR, "account.validation.error.email.exists", TYPE_ERROR))), 422);
     }
 
     @ExceptionHandler(TechnicalException.class)
     @ResponseBody
-    public AjaxResponse handleTechnicalException(final TechnicalException e) {
-        return new AjaxResponse(Lists.newList(
-                new Notification("technical.error", "technical.error.content", TYPE_ERROR)));
+    public ResponseEntity<AjaxResponse> handleTechnicalException(final TechnicalException e) {
+        return this.build(new AjaxResponse(Lists.newList(
+                new Notification("technical.error", "technical.error.content", TYPE_ERROR))), 500);
+    }
+
+    private ResponseEntity<AjaxResponse> build(AjaxResponse response, int status) {
+        return new ResponseEntity<>(response, HttpStatus.valueOf(status));
     }
 }
