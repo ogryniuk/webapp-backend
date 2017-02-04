@@ -31,7 +31,7 @@
   <parent>
     <artifactId>parent</artifactId>
     <groupId>be.yildiz-games</groupId>
-    <version>1.0.8-SNAPSHOT</version>
+    <version>1.0.9</version>
   </parent>
 
   <artifactId>webapp-backend</artifactId>
@@ -42,22 +42,6 @@
 
   <packaging>jar</packaging>
 
-  <properties>
-    <version.bom-junit>1.0.4-SNAPSHOT</version.bom-junit>
-  </properties>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>be.yildiz-games</groupId>
-        <artifactId>bom-junit</artifactId>
-        <version>${version.bom-junit}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -67,7 +51,6 @@
     <dependency>
       <groupId>be.yildiz-games</groupId>
       <artifactId>module-database</artifactId>
-      <version>1.0.3-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>io.reactivex</groupId>
@@ -82,22 +65,16 @@
     <dependency>
       <groupId>de.svenkubiak</groupId>
       <artifactId>jBCrypt</artifactId>
-      <version>0.4.1</version>
-    </dependency>
-    <dependency>
-      <groupId>be.yildiz-games</groupId>
-      <artifactId>bom-junit</artifactId>
-      <version>${version.bom-junit}</version>
-      <type>pom</type>
-      <scope>import</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-all</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
