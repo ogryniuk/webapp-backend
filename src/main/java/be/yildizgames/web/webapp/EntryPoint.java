@@ -26,6 +26,7 @@ package be.yildizgames.web.webapp;
 import be.yildiz.module.database.C3P0ConnectionProvider;
 import be.yildiz.module.database.DataBaseConnectionProvider;
 import be.yildiz.module.database.DbFileProperties;
+import be.yildizgames.web.webapp.infrastructure.io.FileBrokerWebsocketProperties;
 import be.yildizgames.web.webapp.infrastructure.io.FileEmailProperties;
 import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +36,10 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 
 import java.sql.SQLException;
 
@@ -42,14 +47,18 @@ import java.sql.SQLException;
  * @author Grégory Van den Borre
  */
 @SpringBootApplication
+@EnableWebSocketMessageBroker
 @ComponentScan("be.yildizgames.web.webapp.infrastructure.*")
-public class EntryPoint {
+public class EntryPoint extends AbstractWebSocketMessageBrokerConfigurer {
 
     @Value("${dbconfig}")
     private String databaseConfigFile;
 
     @Value("${mailconfig}")
     private String mailConfigFile;
+
+    @Value("${brokerconfig}")
+    private String brokerConfigFile;
 
     /**
      * AJP port.
@@ -63,7 +72,6 @@ public class EntryPoint {
         TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory();
 
         Connector ajpConnector = new Connector("AJP/1.3");
-        ajpConnector.setProtocol("AJP/1.3");
         ajpConnector.setPort(this.port);
         ajpConnector.setSecure(false);
         ajpConnector.setAllowTrace(false);
@@ -80,11 +88,31 @@ public class EntryPoint {
                 new DbFileProperties(this.databaseConfigFile));
     }
 
-
-
     @Bean
     public FileEmailProperties emailProperties() {
         return new FileEmailProperties(this.mailConfigFile);
+    }
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        FileBrokerWebsocketProperties properties = new FileBrokerWebsocketProperties(this.brokerConfigFile);
+        config
+                .enableStompBrokerRelay(properties.getRelay())
+                .setVirtualHost(properties.getBrokerLogin())
+                .setRelayHost(properties.getBrokerHost())
+                .setClientLogin(properties.getBrokerLogin())
+                .setClientPasscode(properties.getBrokerPassword())
+                .setSystemLogin(properties.getBrokerLogin())
+                .setSystemPasscode(properties.getBrokerPassword());
+    }
+
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        FileBrokerWebsocketProperties properties = new FileBrokerWebsocketProperties(this.brokerConfigFile);
+        registry
+                .addEndpoint(properties.getWebsocketEndpoint())
+                .setAllowedOrigins("*")
+                .withSockJS();
     }
 
     public static void main(String[] args) {
