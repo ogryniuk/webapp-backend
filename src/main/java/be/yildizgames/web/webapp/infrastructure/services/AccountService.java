@@ -44,6 +44,7 @@ public class AccountService implements AccountProvider {
     @Autowired
     public AccountService(AccountPersistence persistence) {
         super();
+        assert persistence != null;
         this.persistence = persistence;
     }
 

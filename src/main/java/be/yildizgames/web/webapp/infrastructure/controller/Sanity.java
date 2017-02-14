@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class Sanity {
 
     @RequestMapping(value = "api/v1/sanity")
-    public String  create() {
+    public String create() {
         return "ok";
     }
 }
