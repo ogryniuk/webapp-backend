@@ -44,18 +44,18 @@ public class AccountPersistence extends AbstractPersistence <Account> {
     }
 
     public Optional<Account> getById(String id) {
-        String sql = "SELECT * FROM account WHERE id = ?";
+        String sql = "SELECT * FROM ACCOUNTS WHERE ID = ?";
         return fromSQL(sql, id);
     }
 
     public Optional<Account> findByLogin(String name) {
-            String sql = "SELECT * FROM account WHERE username = ?";
+            String sql = "SELECT * FROM ACCOUNTS WHERE LOGIN = ?";
             return fromSQL(sql, name);
 
     }
 
     public Optional<Account> findByEmail(String email) {
-        String sql = "SELECT * FROM account WHERE email = ?";
+        String sql = "SELECT * FROM ACCOUNTS WHERE EMAIL = ?";
         return fromSQL(sql, email);
     }
 

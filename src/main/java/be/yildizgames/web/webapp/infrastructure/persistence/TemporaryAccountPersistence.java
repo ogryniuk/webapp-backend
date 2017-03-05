@@ -60,8 +60,8 @@ public class TemporaryAccountPersistence extends AbstractPersistence<TemporaryAc
     }
 
     public void save(String login, String password, String email, String token) {
-        String sql = "INSERT INTO temp_account " +
-                "(login, password, email, check_value)" +
+        String sql = "INSERT INTO TEMP_ACCOUNTS " +
+                "(LOGIN, PASSWORD, EMAIL, CHECK_EMAIL)" +
                 " VALUES (?,?,?,?)";
         try(Connection c = this.provider.getConnection()) {
             try(PreparedStatement stmt = c.prepareStatement(sql)) {
@@ -78,17 +78,17 @@ public class TemporaryAccountPersistence extends AbstractPersistence<TemporaryAc
     }
 
     public Optional<TemporaryAccount> findByEmail(String email) {
-        String sql = "SELECT * FROM temp_account WHERE email = ?";
+        String sql = "SELECT * FROM TEMP_ACCOUNTS WHERE EMAIL = ?";
         return fromSQL(sql, email);
     }
 
     public Optional<TemporaryAccount> findByLogin(String login) {
-        String sql = "SELECT * FROM temp_account WHERE login = ?";
+        String sql = "SELECT * FROM TEMP_ACCOUNTS WHERE LOGIN = ?";
         return fromSQL(sql, login);
     }
 
     public void confirm(String login) {
-        String sql = "UPDATE temp_account SET complete=1 WHERE login=?";
+        String sql = "UPDATE TEMP_ACCOUNTS SET complete=1 WHERE LOGIN=?";
         try(Connection c = this.provider.getConnection()) {
             try(PreparedStatement stmt = c.prepareStatement(sql)) {
                 stmt.setString(1, login);
