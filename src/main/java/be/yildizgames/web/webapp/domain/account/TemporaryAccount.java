@@ -29,7 +29,6 @@ import be.yildiz.common.authentication.CredentialException;
 import be.yildizgames.web.webapp.domain.account.exception.AccountValidationException;
 import be.yildizgames.web.webapp.domain.account.exception.EmailExistsValidationException;
 import be.yildizgames.web.webapp.domain.account.exception.LoginExistsValidationException;
-import lombok.NonNull;
 
 import java.util.regex.Pattern;
 
@@ -53,8 +52,12 @@ public class TemporaryAccount {
     private final String uniqueToken;
 
 
-    public TemporaryAccount(@NonNull String login, @NonNull String password, @NonNull String email, @NonNull String uniqueToken) {
+    public TemporaryAccount(String login, String password, String email, String uniqueToken) {
         super();
+        assert login != null;
+        assert password != null;
+        assert email != null;
+        assert uniqueToken != null;
         this.login = login;
         this.password = password;
         this.email = email;
