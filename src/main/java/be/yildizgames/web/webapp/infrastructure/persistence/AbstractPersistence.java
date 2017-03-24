@@ -40,12 +40,12 @@ abstract class AbstractPersistence <T> {
 
     private final DataBaseConnectionProvider provider;
 
-    public AbstractPersistence(DataBaseConnectionProvider provider) {
+    AbstractPersistence(DataBaseConnectionProvider provider) {
         super();
         this.provider = provider;
     }
 
-    protected final Optional<T> fromSQL(String sql, String param) {
+    final Optional<T> fromSQL(String sql, String param) {
         try(Connection c = this.provider.getConnection()) {
             try(PreparedStatement stmt = c.prepareStatement(sql)) {
                 stmt.setString(1, param);
