@@ -49,11 +49,6 @@
       <version>1.5.1.RELEASE</version>
     </dependency>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-websocket</artifactId>
-      <version>1.5.1.RELEASE</version>
-    </dependency>
-    <dependency>
       <groupId>be.yildiz-games</groupId>
       <artifactId>module-database</artifactId>
       <version>1.2.2-SNAPSHOT</version>

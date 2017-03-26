@@ -61,7 +61,7 @@ public class TemporaryAccountPersistence extends AbstractPersistence<TemporaryAc
 
     public void save(String login, String password, String email, String token) {
         String sql = "INSERT INTO TEMP_ACCOUNTS " +
-                "(LOGIN, PASSWORD, EMAIL, CHECK_EMAIL)" +
+                "(LOGIN, PASSWORD, EMAIL, CHECK_VALUE)" +
                 " VALUES (?,?,?,?)";
         try(Connection c = this.provider.getConnection()) {
             try(PreparedStatement stmt = c.prepareStatement(sql)) {

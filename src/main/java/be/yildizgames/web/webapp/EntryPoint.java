@@ -26,7 +26,6 @@ package be.yildizgames.web.webapp;
 import be.yildiz.module.database.C3P0ConnectionProvider;
 import be.yildiz.module.database.DataBaseConnectionProvider;
 import be.yildiz.module.database.DbFileProperties;
-import be.yildizgames.web.webapp.infrastructure.io.FileBrokerWebsocketProperties;
 import be.yildizgames.web.webapp.infrastructure.io.FileEmailProperties;
 import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,10 +35,6 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
-import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 
 import java.sql.SQLException;
 
@@ -47,9 +42,9 @@ import java.sql.SQLException;
  * @author Grégory Van den Borre
  */
 @SpringBootApplication
-@EnableWebSocketMessageBroker
+//@EnableWebSocketMessageBroker
 @ComponentScan("be.yildizgames.web.webapp.infrastructure.*")
-public class EntryPoint extends AbstractWebSocketMessageBrokerConfigurer {
+public class EntryPoint /*extends AbstractWebSocketMessageBrokerConfigurer*/ {
 
     @Value("${dbconfig}")
     private String databaseConfigFile;
@@ -93,7 +88,7 @@ public class EntryPoint extends AbstractWebSocketMessageBrokerConfigurer {
         return new FileEmailProperties(this.mailConfigFile);
     }
 
-    @Override
+    /*@Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         FileBrokerWebsocketProperties properties = new FileBrokerWebsocketProperties(this.brokerConfigFile);
         config
@@ -113,7 +108,7 @@ public class EntryPoint extends AbstractWebSocketMessageBrokerConfigurer {
                 .addEndpoint(properties.getWebsocketEndpoint())
                 .setAllowedOrigins("*")
                 .withSockJS();
-    }
+    }*/
 
     public static void main(String[] args) {
         SpringApplication.run(EntryPoint.class, args);
