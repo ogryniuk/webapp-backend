@@ -23,6 +23,8 @@
 
 package be.yildizgames.web.webapp.application.account;
 
+import be.yildizgames.web.webapp.domain.account.Account;
+
 import java.util.Optional;
 
 /**
