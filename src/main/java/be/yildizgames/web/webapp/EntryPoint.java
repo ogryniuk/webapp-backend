@@ -42,18 +42,14 @@ import java.sql.SQLException;
  * @author Grégory Van den Borre
  */
 @SpringBootApplication
-//@EnableWebSocketMessageBroker
 @ComponentScan("be.yildizgames.web.webapp.infrastructure.*")
-public class EntryPoint /*extends AbstractWebSocketMessageBrokerConfigurer*/ {
+public class EntryPoint {
 
     @Value("${dbconfig}")
     private String databaseConfigFile;
 
     @Value("${mailconfig}")
     private String mailConfigFile;
-
-    @Value("${brokerconfig}")
-    private String brokerConfigFile;
 
     /**
      * AJP port.
@@ -87,28 +83,6 @@ public class EntryPoint /*extends AbstractWebSocketMessageBrokerConfigurer*/ {
     public FileEmailProperties emailProperties() {
         return new FileEmailProperties(this.mailConfigFile);
     }
-
-    /*@Override
-    public void configureMessageBroker(MessageBrokerRegistry config) {
-        FileBrokerWebsocketProperties properties = new FileBrokerWebsocketProperties(this.brokerConfigFile);
-        config
-                .enableStompBrokerRelay(properties.getRelay())
-                .setVirtualHost(properties.getBrokerLogin())
-                .setRelayHost(properties.getBrokerHost())
-                .setClientLogin(properties.getBrokerLogin())
-                .setClientPasscode(properties.getBrokerPassword())
-                .setSystemLogin(properties.getBrokerLogin())
-                .setSystemPasscode(properties.getBrokerPassword());
-    }
-
-    @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        FileBrokerWebsocketProperties properties = new FileBrokerWebsocketProperties(this.brokerConfigFile);
-        registry
-                .addEndpoint(properties.getWebsocketEndpoint())
-                .setAllowedOrigins("*")
-                .withSockJS();
-    }*/
 
     public static void main(String[] args) {
         SpringApplication.run(EntryPoint.class, args);

@@ -28,7 +28,7 @@ package be.yildizgames.web.webapp.domain.news.exception;
  */
 public class InvalidNewsException extends Exception {
 
-    InvalidNewsException(String message) {
+    public InvalidNewsException(String message) {
         super(message);
     }
 }

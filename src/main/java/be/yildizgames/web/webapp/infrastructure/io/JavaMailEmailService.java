@@ -38,16 +38,14 @@ public class JavaMailEmailService implements EmailService {
 
     private final Session session;
 
-    /**
-     * Mail address.
-     */
-
     private final String username;
 
     public JavaMailEmailService(FileEmailProperties properties) {
         super();
         this.username = properties.getUser();
         this.session = Session.getInstance(properties.getProperties(), new Authenticator() {
+
+            @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, properties.getPassword());
             }

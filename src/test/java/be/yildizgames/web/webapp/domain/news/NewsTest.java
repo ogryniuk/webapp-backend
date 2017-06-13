@@ -24,6 +24,7 @@
 package be.yildizgames.web.webapp.domain.news;
 
 import be.yildizgames.web.webapp.domain.news.exception.InvalidNewsException;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
@@ -46,7 +47,11 @@ public class NewsTest {
 
         @Test
         public void happyFlow() throws InvalidNewsException {
-            new News(TITLE_OK, CONTENT_OK, IMAGE_OK, ACCOUNT_OK);
+            News news = new News(TITLE_OK, CONTENT_OK, IMAGE_OK, ACCOUNT_OK);
+            Assert.assertEquals(TITLE_OK, news.getTitle());
+            Assert.assertEquals(CONTENT_OK, news.getContent());
+            Assert.assertEquals(IMAGE_OK, news.getImage());
+            Assert.assertEquals(ACCOUNT_OK, news.getAuthor());
         }
 
         @Test(expected = NullPointerException.class)
@@ -93,6 +98,16 @@ public class NewsTest {
         @Test(expected = NullPointerException.class)
         public void withNullAuthor() throws InvalidNewsException {
             new News(TITLE_OK, CONTENT_OK, IMAGE_OK, null);
+        }
+    }
+
+    public static class UpdateTitle {
+
+        @Test
+        public void happyFlow() throws InvalidNewsException {
+            News news = new News(TITLE_OK, CONTENT_OK, IMAGE_OK, ACCOUNT_OK);
+            news = news.updateTitle(TITLE_OK + "a");
+            Assert.assertEquals(TITLE_OK + "a", news.getTitle());
         }
     }
 }
