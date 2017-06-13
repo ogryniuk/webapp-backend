@@ -23,9 +23,9 @@
 
 package be.yildizgames.web.webapp.infrastructure.controller.news;
 
-import be.yildizgames.web.webapp.domain.news.InvalidNewsException;
+import be.yildizgames.web.webapp.domain.news.exception.InvalidNewsException;
 import be.yildizgames.web.webapp.domain.news.News;
-import be.yildizgames.web.webapp.domain.news.NewsProvider;
+import be.yildizgames.web.webapp.application.news.NewsProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

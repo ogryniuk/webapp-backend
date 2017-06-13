@@ -23,6 +23,7 @@
 
 package be.yildizgames.web.webapp.domain.news;
 
+import be.yildizgames.web.webapp.domain.news.exception.InvalidNewsException;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;

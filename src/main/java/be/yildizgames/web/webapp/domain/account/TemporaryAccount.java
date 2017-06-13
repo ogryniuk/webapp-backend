@@ -26,6 +26,8 @@ package be.yildizgames.web.webapp.domain.account;
 import be.yildiz.common.authentication.AuthenticationChecker;
 import be.yildiz.common.authentication.AuthenticationRules;
 import be.yildiz.common.authentication.CredentialException;
+import be.yildizgames.web.webapp.application.account.AccountProvider;
+import be.yildizgames.web.webapp.application.account.TemporaryAccountProvider;
 import be.yildizgames.web.webapp.domain.account.exception.AccountValidationException;
 import be.yildizgames.web.webapp.domain.account.exception.EmailExistsValidationException;
 import be.yildizgames.web.webapp.domain.account.exception.LoginExistsValidationException;

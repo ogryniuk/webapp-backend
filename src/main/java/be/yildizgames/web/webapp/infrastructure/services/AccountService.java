@@ -24,7 +24,7 @@
 package be.yildizgames.web.webapp.infrastructure.services;
 
 import be.yildizgames.web.webapp.domain.account.Account;
-import be.yildizgames.web.webapp.domain.account.AccountProvider;
+import be.yildizgames.web.webapp.application.account.AccountProvider;
 import be.yildizgames.web.webapp.domain.account.exception.AccountNoFoundException;
 import be.yildizgames.web.webapp.infrastructure.persistence.AccountPersistence;
 import org.springframework.beans.factory.annotation.Autowired;

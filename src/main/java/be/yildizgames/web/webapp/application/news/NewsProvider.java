@@ -21,17 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  SOFTWARE.
  */
 
-package be.yildizgames.web.webapp.domain.account;
+package be.yildizgames.web.webapp.application.news;
 
-import java.util.Optional;
+import be.yildizgames.web.webapp.domain.news.exception.InvalidNewsException;
+import be.yildizgames.web.webapp.domain.news.News;
+
+import java.util.List;
 
 /**
  * @author Grégory Van den Borre
  */
-public interface AccountProvider {
-    Account getById(String id);
+@FunctionalInterface
+public interface NewsProvider {
 
-    Optional<Account> findByLogin(String login);
+    List<News> findLast(String language, int number) throws InvalidNewsException;
 
-    Optional<Account> findByEmail(String email);
 }

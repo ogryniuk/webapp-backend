@@ -21,13 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  SOFTWARE.
  */
 
-package be.yildizgames.web.webapp.domain.account;
+package be.yildizgames.web.webapp.application.account;
+
+import be.yildizgames.web.webapp.domain.account.TemporaryAccount;
+
+import java.util.Optional;
 
 /**
  * @author Grégory Van den Borre
  */
-@FunctionalInterface
-public interface TemporaryAccountIdProvider {
+public interface TemporaryAccountProvider extends TemporaryAccountIdProvider {
 
-    String getNewId(String login, String password, String email);
+    Optional<TemporaryAccount> findByEmail(String email);
+
+    Optional<TemporaryAccount> findByLogin(String login);
 }

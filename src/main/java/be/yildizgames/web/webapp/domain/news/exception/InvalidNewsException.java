@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  SOFTWARE.
  */
 
-package be.yildizgames.web.webapp.domain.news;
+package be.yildizgames.web.webapp.domain.news.exception;
 
 /**
  * @author Grégory Van den Borre

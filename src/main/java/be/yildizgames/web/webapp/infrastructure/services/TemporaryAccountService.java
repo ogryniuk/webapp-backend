@@ -24,7 +24,7 @@
 package be.yildizgames.web.webapp.infrastructure.services;
 
 import be.yildizgames.web.webapp.domain.account.TemporaryAccount;
-import be.yildizgames.web.webapp.domain.account.TemporaryAccountProvider;
+import be.yildizgames.web.webapp.application.account.TemporaryAccountProvider;
 import be.yildizgames.web.webapp.infrastructure.io.EmailService;
 import be.yildizgames.web.webapp.infrastructure.io.account.TemporaryAccountEmail;
 import be.yildizgames.web.webapp.infrastructure.persistence.TemporaryAccountPersistence;

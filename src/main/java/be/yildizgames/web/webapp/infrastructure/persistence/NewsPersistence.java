@@ -23,9 +23,9 @@
 
 package be.yildizgames.web.webapp.infrastructure.persistence;
 
-import be.yildizgames.web.webapp.domain.news.InvalidNewsException;
+import be.yildizgames.web.webapp.domain.news.exception.InvalidNewsException;
 import be.yildizgames.web.webapp.domain.news.News;
-import be.yildizgames.web.webapp.domain.news.NewsProvider;
+import be.yildizgames.web.webapp.application.news.NewsProvider;
 import org.springframework.stereotype.Repository;
 
 import java.util.Arrays;
