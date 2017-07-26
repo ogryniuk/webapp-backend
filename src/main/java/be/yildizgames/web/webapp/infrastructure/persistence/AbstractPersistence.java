@@ -46,20 +46,23 @@ abstract class AbstractPersistence <T> {
     }
 
     final Optional<T> fromSQL(String sql, String param) {
-        try(Connection c = this.provider.getConnection()) {
-            try(PreparedStatement stmt = c.prepareStatement(sql)) {
-                stmt.setString(1, param);
-                ResultSet rs = stmt.executeQuery();
-                if(rs.first()) {
-                    T a = fromRS(rs);
-                    return Optional.of(a);
-                }
-                return Optional.empty();
+        try(Connection c = this.provider.getConnection();
+            PreparedStatement stmt = c.prepareStatement(sql);
+            ResultSet rs = this.getResultSet(stmt, param)) {
+            if(rs.first()) {
+                T a = fromRS(rs);
+                return Optional.of(a);
             }
+            return Optional.empty();
         } catch (SQLException e) {
             Logger.error(e);
             throw new TechnicalException();
         }
+    }
+
+    private ResultSet getResultSet(PreparedStatement stmt, String param) throws SQLException {
+        stmt.setString(1, param);
+        return stmt.executeQuery();
     }
 
 
