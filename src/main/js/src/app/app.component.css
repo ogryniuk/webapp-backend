@@ -1,0 +1,17 @@
+.jumbotron {
+  background-color: rgb(80, 80, 80);
+  color: white;
+  margin:0;
+  padding: 10px;
+  border-top: solid white 1px;
+  border-bottom: solid white 1px;
+}
+
+.jumbotron h1{
+  font-size: 3em;
+  margin-top: 0;
+}
+
+.jumbotron h3{
+  font-size: 1.5em;
+}

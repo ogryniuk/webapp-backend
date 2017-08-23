@@ -1,0 +1,66 @@
+{
+  "project": {
+    "version": "1.0.0",
+    "name": "Yildiz webapp frontend"
+  },
+  "apps": [
+    {
+      "root": "src",
+      "outDir": "../../../target/classes/static",
+      "assets": [
+        "favicon.ico",
+        "i18n"
+      ],
+      "index": "index.html",
+      "main": "main.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.json",
+      "prefix": "app",
+      "mobile": false,
+      "styles": [
+        "css/bootstrap.min.css",
+        "css/main.css",
+        "css/pnotify.custom.min.css"
+      ],
+      "scripts": [
+         "js/vendor/jquery-3.1.1.min.js",
+         "js/vendor/bootstrap.min.js",
+         "js/vendor/pnotify.custom.min.js",
+         "js/vendor/validator.min.js"
+      ],
+      "environmentSource" : "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      }
+    }
+  ],
+  "addons": [],
+  "packages": [],
+  "e2e": {
+    "protractor": {
+      "config": "./protractor.conf.js"
+    }
+  },
+  "test": {
+    "karma": {
+      "config": "./karma.conf.js"
+    }
+  },
+  "defaults": {
+    "styleExt": "css",
+    "prefixInterfaces": false,
+    "inline": {
+      "style": false,
+      "template": false
+    },
+    "spec": {
+      "class": false,
+      "component": true,
+      "directive": true,
+      "module": false,
+      "pipe": true,
+      "service": true
+    }
+  }
+}

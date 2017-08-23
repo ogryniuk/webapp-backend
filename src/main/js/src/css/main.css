@@ -1,0 +1,26 @@
+body {
+  background-color: rgb(80,80,80);
+  color: white;
+}
+
+nav {
+  padding: 15px;
+}
+
+button.btn-primary, .btn-default {
+    color: white;
+    background-color: darkslategray;
+    border-color: black;
+}
+
+button.btn-primary:hover, button.btn-primary:focus, .btn-default:hover, .btn-default:focus {
+    color: white;
+    background-color: black;
+    border-color: black;
+}
+
+h3:after {
+    content: '';
+    display: block;
+    border: 1px solid white;
+}

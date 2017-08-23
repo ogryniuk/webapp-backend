@@ -1,0 +1,39 @@
+
+
+  <nav>
+    <a routerLink='/home' [innerHTML]="'home.link' | translate"></a>
+    <a routerLink='/privacy' [innerHTML]="'privacy.link' | translate"></a>
+    <a routerLink='/profile' [innerHTML]="'profile.link' | translate"></a>
+
+    <div class="btn-group pull-right">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{translateService.currentLang}} <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a (click) = "setEnglish()">english</a></li>
+        <li><a (click) = "setFrench()">français</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="jumbotron">
+    <div class="container">
+      <h1>Yildiz-Online &lt;Alpha stage&gt; </h1>
+      <h3 [innerHTML]="'menu.title' | translate"></h3>
+      <button
+        type="button"
+        class="btn btn-primary btn-lg pull-right"
+        data-toggle="modal"
+        data-target="#create-account-modal"
+        [innerHTML]="'menu.title.button.create' | translate">
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary btn-lg pull-right"
+        id="download-client"
+        [innerHTML]="'menu.title.button.download' | translate">
+      </button>
+    </div>
+  </div>
+<main>
+  <router-outlet></router-outlet>
+</main>

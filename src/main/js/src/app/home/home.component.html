@@ -1,0 +1,85 @@
+ <div>
+    <div class="col-md-8">
+      <div class="col-md-4"></div>
+      <div class="col-md-8">
+        <h3 [innerHTML]="'index.create.title' | translate"></h3>
+        <p [innerHTML]="'index.create.desc' | translate"></p></div>
+      </div>
+      <div class="col-md-8 pull-right">
+        <div class="col-md-4"></div>
+        <div class="col-md-8">
+          <h3 [innerHTML]="'index.resource.title' | translate"></h3>
+          <p [innerHTML]="'index.resource.desc' | translate"></p>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="col-md-4"></div>
+        <div class="col-md-8">
+          <h3 [innerHTML]="'index.fleet.title' | translate"></h3>
+          <p [innerHTML]="'index.fleet.desc' | translate"></p></div>
+        </div>
+        <div class="col-md-8 pull-right">
+          <div class="col-md-4"></div>
+          <div class="col-md-8">
+            <h3 [innerHTML]="'index.attack.title' | translate"></h3>
+            <p [innerHTML]="'index.attack.desc' | translate"></p>
+          </div>
+        </div>
+      </div>
+
+      <div id="create-account-modal" [hidden]="hideModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" [innerHTML]="'index.modal.create.title' | translate"></h4>
+              </div>
+              <div class="">
+              <form data-toggle="validator" id="create-account-form">
+                <div class="form-group">
+                  <input
+                    #login
+                    type="text"
+                    class="form-control"
+                    required
+                    minlength="3"
+                    maxlength="20"
+                    data-remote="https://www.yildiz-games.be/api/v1/accounts/validations/logins/unicities"
+                    placeholder="{{'index.modal.create.placeholder.login' | translate}}">
+                  <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group">
+                  <input
+                    #password
+                    type="password"
+                    class="form-control"
+                    required
+                    minlength="5"
+                    maxlength="20"
+                    placeholder="{{'index.modal.create.placeholder.password' | translate}}">
+                  <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group">
+                  <input
+                    #email
+                    type="email"
+                    class="form-control"
+                    required
+                    data-remote="https://www.yildiz-games.be/api/v1/accounts/validations/emails/unicities"
+                    placeholder="{{'index.modal.create.placeholder.email' | translate}}">
+                  <div class="help-block with-errors"></div>
+                    </div>
+                    <button
+                      type="submit"
+                      class="btn btn-primary btn-lg"
+                      id="create-account-send"
+                      [innerHTML]="'index.modal.create.button' | translate"
+                      (click)="postAccount(login.value, password.value, email.value); false;"
+                    ></button>
+                  </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
