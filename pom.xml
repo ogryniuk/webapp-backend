@@ -131,6 +131,23 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>src/main/js/node_modules</directory>
+            </fileset>
+            <fileset>
+              <directory>src/main/js</directory>
+              <includes>
+                <include>package-lock.json</include>
+              </includes>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
