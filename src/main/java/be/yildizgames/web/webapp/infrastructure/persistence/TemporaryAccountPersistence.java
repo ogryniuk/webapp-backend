@@ -23,10 +23,11 @@
 
 package be.yildizgames.web.webapp.infrastructure.persistence;
 
-import be.yildiz.common.log.Logger;
 import be.yildiz.module.database.DataBaseConnectionProvider;
 import be.yildizgames.web.webapp.domain.account.TemporaryAccount;
 import be.yildizgames.web.webapp.infrastructure.TechnicalException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -41,6 +42,8 @@ import java.util.Optional;
  */
 @Repository
 public class TemporaryAccountPersistence extends AbstractPersistence<TemporaryAccount>{
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TemporaryAccountPersistence.class);
 
     private final DataBaseConnectionProvider provider;
 
@@ -72,7 +75,7 @@ public class TemporaryAccountPersistence extends AbstractPersistence<TemporaryAc
                 stmt.executeUpdate();
             }
         } catch (SQLException e) {
-            Logger.error(e);
+            LOGGER.error("Persistence error", e);
             throw new TechnicalException();
         }
     }

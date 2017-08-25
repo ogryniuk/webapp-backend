@@ -23,9 +23,10 @@
 
 package be.yildizgames.web.webapp.infrastructure.persistence;
 
-import be.yildiz.common.log.Logger;
 import be.yildiz.module.database.DataBaseConnectionProvider;
 import be.yildizgames.web.webapp.infrastructure.TechnicalException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,6 +38,8 @@ import java.util.Optional;
  * @author Grégory Van den Borre
  */
 abstract class AbstractPersistence <T> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractPersistence.class);
 
     private final DataBaseConnectionProvider provider;
 
@@ -55,7 +58,7 @@ abstract class AbstractPersistence <T> {
             }
             return Optional.empty();
         } catch (SQLException e) {
-            Logger.error(e);
+            LOGGER.error("Persistence error", e);
             throw new TechnicalException();
         }
     }

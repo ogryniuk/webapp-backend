@@ -23,7 +23,8 @@
 
 package be.yildizgames.web.webapp.infrastructure.io;
 
-import be.yildiz.common.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
@@ -35,6 +36,8 @@ import javax.mail.internet.MimeMessage;
  */
 @Service
 public class JavaMailEmailService implements EmailService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(JavaMailEmailService.class);
 
     private final Session session;
 
@@ -62,7 +65,7 @@ public class JavaMailEmailService implements EmailService {
             message.setText(template.getBody());
             Transport.send(message);
         } catch (MessagingException mex) {
-            Logger.error(mex);
+            LOGGER.error("Error sending mail", mex);
         }
     }
 }
