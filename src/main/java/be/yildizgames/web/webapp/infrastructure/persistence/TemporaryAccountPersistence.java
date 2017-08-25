@@ -98,7 +98,7 @@ public class TemporaryAccountPersistence extends AbstractPersistence<TemporaryAc
                 stmt.executeUpdate();
             }
         } catch (SQLException e) {
-            Logger.error(e);
+            LOGGER.error("Error in account corfirmation", e);
             throw new TechnicalException();
         }
     }

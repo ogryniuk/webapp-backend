@@ -45,22 +45,22 @@ public class TemporaryAccountTest {
             Assert.assertEquals("me@me.com", ta.getEmail());
         }
 
-        @Test(expected = NullPointerException.class)
+        @Test(expected = AssertionError.class)
         public void withLoginNull() {
             new TemporaryAccount(null, "myPass", "me@me.com", "1234");
         }
 
-        @Test(expected = NullPointerException.class)
+        @Test(expected = AssertionError.class)
         public void withPasswordNull() {
             new TemporaryAccount("me", null, "me@me.com", "1234");
         }
 
-        @Test(expected = NullPointerException.class)
+        @Test(expected = AssertionError.class)
         public void withEmailNull() {
             new TemporaryAccount("me", "myPass", null, "1234");
         }
 
-        @Test(expected = NullPointerException.class)
+        @Test(expected = AssertionError.class)
         public void withTokenNull() {
             new TemporaryAccount("me", "myPass", "me@me.com", null);
         }
