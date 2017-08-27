@@ -1,3 +1,5 @@
+package be.yildizgames.web.webapp.domain.news;
+
 /*
  * This file is part of the Yildiz-Engine project, licenced under the MIT License  (MIT)
  *
@@ -21,25 +23,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  SOFTWARE.
  */
 
-package be.yildizgames.web.webapp.domain.news;
-
-import java.net.URL;
-
 /**
- * @author Grégory Van den Borre
+ * Introduces information for each individual news author
+ *
+ * @author Oleksandr Gryniuk
+ *
  */
-public interface NewsDto {
+public class Author {
 
-    Integer getNewsId();
+    private int id;
 
-    String getTitle();
+    private final String name;
 
-    String getContent();
+    public Author(String authorName) {
+        this.name = authorName;
+    }
 
-    Integer getTagId();
-
-    URL getImage();
-
-    Author getAuthor();
-
+    public final String getName() {
+        return this.name;
+    }
 }

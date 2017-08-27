@@ -48,6 +48,6 @@ public class NewsController {
 
     @RequestMapping("/api/v1/news/{language}")
     public List<News> find(@PathVariable final String language) throws InvalidNewsException{
-        return this.newsProvider.findLast("en", 10);
+        return this.newsProvider.findLatest("en", 10);
     }
 }

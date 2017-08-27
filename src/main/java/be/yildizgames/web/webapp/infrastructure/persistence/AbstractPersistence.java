@@ -23,6 +23,7 @@
 
 package be.yildizgames.web.webapp.infrastructure.persistence;
 
+import be.yildiz.common.collections.Lists;
 import be.yildiz.module.database.DataBaseConnectionProvider;
 import be.yildizgames.web.webapp.infrastructure.TechnicalException;
 import org.slf4j.Logger;
@@ -32,6 +33,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -68,6 +70,21 @@ abstract class AbstractPersistence <T> {
         return stmt.executeQuery();
     }
 
+    final List<T> listFromSQL(String sql) {
+        try (Connection c = this.provider.getConnection()){
+            try (PreparedStatement stmt = c.prepareStatement(sql)){
+                ResultSet rs = stmt.executeQuery();
+                List<T> result = Lists.newList();
+                while(rs.next()) {
+                    result.add(this.fromRS(rs));
+                }
+                return result;
+            }
+        } catch (SQLException e) {
+            LOGGER.error("Persistence error" ,e);
+            throw new TechnicalException();
+        }
+    }
 
     protected abstract T fromRS(ResultSet rs) throws SQLException;
 }

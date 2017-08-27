@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+xmlnssi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+<changeSet id="1" author="me">
+
+<createTable
+schemaName="YILDIZDATABASE"
+tableName="AUTHORS">
+
+<column name = "AUT_ID" type="SMALLINT UNSIGNED" autoIncrement="true">
+<constraints primaryKey="true"/>
+</column>
+
+<column name = "AUT_NAME" type= "VARCHAR(35)" defaultValue="default"/>
+
+<column name = "ACC_ID" type="SMALLINT UNSIGNED"  autoIncrement="true"/>
+
+
+</createTable>
+
+<createTable
+schemaName="YILDIZDATABASE"
+tableName="NEWS">
+
+<column name = "NEW_ID" type="SMALLINT UNSIGNED" autoIncrement="true">
+<constraints primaryKey="true"/>
+</column>
+
+<column name = "AUT_ID" type="SMALLINT UNSIGNED" >
+<constraints foreignKeyName="FK_AUT_ID"  referencedTableName="AUTHORS" referencedColumnNames="AUT_ID" />
+</column>
+
+<column name = "NEW_CREATION DATE" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
+
+<column name = "TAG_ID" type="SMALLINT UNSIGNED">
+<constraints primaryKey="true"/> 
+</column>
+
+<column name = "PIC" type="DATALINK">
+<constraints primaryKey="true"/>
+</column>
+
+</createTable>
+
+<createTable 
+schemaName="YILDIZDATABASE"
+tableName="NEWS_EN"> 
+
+<column name = "NEW_ID"> 
+<constraints foreignKeyName="FK_NEW_ID" referencedTableName="NEWS" referencedColumnNames="NEW_ID"/>
+</column>
+
+<column name = "TITLE" type="VARCHAR(20)" defaultValue="default"/>
+
+<column name = "CONTENT" type="VARCHAR(255)" defaultValue="default"/>
+
+<column name = "TAG_ID"
+<constraints primaryKey="true" foreignKeyName="FK_TAG_ID" referencedTableName="TAGS" referencedColumnNames="TAG_ID"> 
+<constraints/>
+</column>
+<column name = "PIC" type="DATALINK">
+<constraints foreignKeyName="FK_PIC" referencedTableName="NEWS" referencedColumnNames="PIC"/>
+</column>
+
+</createTable>
+
+
+<createTable
+schemaName="YILDIZDATABASE"
+tableName="NEWS_FR"> 
+
+<column name = "NEW_ID"> 
+<constraints foreignKeyName="FK_NEW_ID" referencedTableName="NEWS" referencedColumnNames="NEW_ID"/>
+</column>
+
+<column name = "TITLE" type="VARCHAR(20)" defaultValue="default"/>
+
+<column name = "CONTENT" type="VARCHAR(255)" defaultValue="default"/>
+
+<column name = "TAG_ID">
+<constraints primaryKey="true" foreignKeyName="FK_TAG_ID" referencedTableName="TAGS" referencedColumnNames="TAG_ID"/> 
+</column>
+
+<column name = "PIC" type="DATALINK">
+<constraints foreignKeyName="FK_PIC" referencedTableName="NEWS" referencedColumnNames="PIC"/>
+</column>
+
+</createTable>
+
+<createTable
+schemaName="YILDIZDATABASE"
+tableName="TAGS">
+
+<column name = "TAG_ID" type="SMALLINT UNSIGNED">
+<constraints primaryKey="true" foreignKeyName="FK_TAG_ID" referencedTableName="NEWS" referencedColumnNames="TAG_ID"/>
+</column>
+
+<column name = "TAG DESCRIPTION" type="VARCHAR(255)" defaultValue="default"/>
+
+
+
+</createTable>
+
+<createTable
+schemaName="YILDIZDATABASE"
+tableName="TAGS_EN"> 
+
+<column name = "TAG_ID" type="SMALLINT UNSIGNED">
+<constraints foreignKeyName="FK_TAG_ID" referencedTableName="NEWS_EN" referencedColumnNames="TAG_ID"/>
+</column>
+
+<column name = "VALUE" type="VARCHAR(20)" defaultValue="default">
+
+</createTable>
+
+<createTable
+schemaName="YILDIZDATABASE"
+tableName="TAGS_FR"> 
+
+<column name = "TAG_ID" type="SMALLINT UNSIGNED">
+<constraints foreignKeyName="FK_TAG_ID" referencedTableName="NEWS_FR" referencedColumnNames="TAG_ID"/>
+</column>
+
+<column name = "VALUE" type="VARCHAR(20)" defaultValue="default">
+
+</createTable>
+
+</changeSet>
+
+</databaseChangeLog>

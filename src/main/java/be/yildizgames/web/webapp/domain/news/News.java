@@ -20,89 +20,115 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  SOFTWARE.
  */
-
 package be.yildizgames.web.webapp.domain.news;
 
 import be.yildizgames.web.webapp.domain.news.exception.InvalidNewsException;
 
-import java.util.Date;
-
+import java.net.URL;
+import java.time.LocalDateTime;
 
 /**
- * @author Grégory Van den Borre
+ * Implements a Domain model for News in the module 'webapp-backend'
+ *
+ * @author Oleksandr Gryniuk
+ *
  */
 public class News implements NewsDto {
 
-    public static final int TITLE_MIN = 1;
-
-    public static final int TITLE_MAX = 20;
-
-    public static final int CONTENT_MIN = 1;
-
-    public static final int CONTENT_MAX = 255;
-
-    private static final String TITLE_MIN_VALID = "Title must be at least " + TITLE_MIN + " chars.";
-
-    private static final String CONTENT_MIN_VALID = "Content must be at least " + CONTENT_MIN + " chars.";
-
-    private static final String TITLE_MAX_VALID = "Title cannot have more than " + TITLE_MAX + " chars.";
-
-    private static final String CONTENT_MAX_VALID = "Content cannot have more than " + CONTENT_MAX + " chars.";
+    private final Integer newsId;
 
     private final String title;
 
     private final String content;
 
-    private final String image;
+    private final Integer tagId;
 
-    private final long creationDate;
+    private final URL image;
 
-    private final long lastModificationDate;
+    public static final int CONTENT_MIN = 1;
 
-    private final String author;
+    public static final int CONTENT_MAX = 255;
 
+    public static final int TAG_ID_MIN = 1;
 
-    public News(String title, String content, String image, String author) throws InvalidNewsException {
-        this(title, content, image, author, new Date().getTime());
+    public static final int TAG_ID_MAX = 20;
+
+    private static final String MIN_VALID_CONTENT_MESSAGE = "Content must be at least " + CONTENT_MIN + " chars.";
+
+    private static final String MAX_VALID_CONTENT_MESSAGE = "Content cannot have more than " + CONTENT_MAX + " chars.";
+
+    private static final String TAG_ID_MIN_VALID = "Tag ID must be at least " + TAG_ID_MIN + " chars.";
+
+    private static final String TAG_ID_MAX_VALID = "Tag ID cannot have more than " + TAG_ID_MAX + " chars.";
+
+    private final LocalDateTime creationDate;
+
+    private final Author author;
+
+    public News(Integer newsId, String title, String content, Integer tagId, URL image, Author author)
+            throws InvalidNewsException {
+
+        this(newsId, title, content, tagId, image, author, LocalDateTime.now());
+        if (title.equals(null)) {
+            throw new InvalidNewsException("Title is null");
+        }
     }
 
-    private News(String title, String content, String image, String author, long creationDate) throws InvalidNewsException {
+    private News(Integer newsId, String title, String content, Integer tagId, URL image, Author author,
+                 LocalDateTime creationDate) throws InvalidNewsException {
         super();
 
-        if(title.length() < TITLE_MIN) {
-            throw new InvalidNewsException(TITLE_MIN_VALID);
-        } else if(title.length() > TITLE_MAX) {
-            throw new InvalidNewsException(TITLE_MAX_VALID);
+        if (newsId.equals(null)) {
+            throw new InvalidNewsException("The News ID is null");
         }
-        if(content.length() < CONTENT_MIN) {
-            throw new InvalidNewsException(CONTENT_MIN_VALID);
-        } else if(content.length() > CONTENT_MAX) {
-            throw new InvalidNewsException(CONTENT_MAX_VALID);
+
+        if (title.equals(null)) {
+            throw new InvalidNewsException("Title is null");
         }
-        if(image == null) {
-            throw new NullPointerException("Image is null");
+
+        if (content.length() < CONTENT_MIN) {
+            throw new InvalidNewsException(MIN_VALID_CONTENT_MESSAGE);
+        } else if (content.length() > CONTENT_MAX) {
+            throw new InvalidNewsException(MAX_VALID_CONTENT_MESSAGE);
         }
-        if(author == null) {
-            throw new NullPointerException("Author is null");
+        if (tagId.toString().length() < TAG_ID_MIN) {
+            throw new InvalidNewsException(TAG_ID_MIN_VALID);
+        } else if (tagId.toString().length() > TAG_ID_MAX) {
+            throw new InvalidNewsException(TAG_ID_MAX_VALID);
         }
+
+        if (image.equals(null)) {
+            throw new InvalidNewsException("Image is null");
+        }
+
+        if (author.equals(null)) {
+            throw new InvalidNewsException("Author is null");
+        }
+
+        this.newsId = newsId;
         this.title = title;
         this.content = content;
+        this.tagId = tagId;
         this.image = image;
-        this.author = author;
         this.creationDate = creationDate;
-        this.lastModificationDate = new Date().getTime();
+        this.author = author;
     }
 
     public News updateTitle(String newTitle) throws InvalidNewsException {
-        return new News(newTitle, this.content, this.image, this.author, this.creationDate);
+        return new News(this.newsId, newTitle, this.content, this.tagId, this.image, this.author);
     }
 
     public News updateContent(String newContent) throws InvalidNewsException {
-        return new News(this.title, newContent, this.image, this.author, this.creationDate);
+        return new News(this.newsId, this.title, newContent, this.tagId, this.image, this.author);
     }
 
-    public News updateImage(String newImage) throws InvalidNewsException {
-        return new News(this.title, this.content, newImage, this.author, this.creationDate);
+    public News updatePicture(URL newImage) throws InvalidNewsException {
+        return new News(this.newsId, this.title, this.content, this.tagId, newImage, this.author);
+    }
+
+    @Override
+    public Integer getNewsId() {
+        return this.newsId;
     }
 
     @Override
@@ -111,24 +137,24 @@ public class News implements NewsDto {
     }
 
     @Override
-    public String getContent() {
-        return content;
+    public String getContent() { return content; }
+
+    @Override
+    public Integer getTagId() {
+        return this.tagId;
     }
 
     @Override
-    public String getImage() {
-        return image;
+    public URL getImage() {
+        return this.image;
     }
 
-    public long getCreationDate() {
-        return creationDate;
+    @Override
+    public Author getAuthor() {
+        return this.author;
     }
 
-    public long getLastModificationDate() {
-        return lastModificationDate;
-    }
-
-    public String getAuthor() {
-        return author;
+    public LocalDateTime getCreationDate() {
+        return this.creationDate;
     }
 }

@@ -28,6 +28,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * @author Grégory Van den Borre
@@ -35,77 +40,78 @@ import org.junit.runner.RunWith;
 @RunWith(Enclosed.class)
 public class NewsTest {
 
+    private static final Integer NEWSID_OK = 1;
+
     private static final String TITLE_OK = "aTitle";
 
     private static final String CONTENT_OK = "aContent";
 
-    private static final String IMAGE_OK = "NewsTest.class";
+    private static final Integer TAGID_OK = 1;
 
-    private static final String ACCOUNT_OK = "me";
+    private static final Author AUTHOR_OK = new Author("name");
 
     public static class Constructor {
 
         @Test
-        public void happyFlow() throws InvalidNewsException {
-            News news = new News(TITLE_OK, CONTENT_OK, IMAGE_OK, ACCOUNT_OK);
+        public void happyFlow() throws InvalidNewsException, MalformedURLException {
+
+            final URL IMAGE_OK = new URL("https://www.yildiz-games.be/yildiz-engine/");
+            News news = new News(NEWSID_OK, TITLE_OK, CONTENT_OK, TAGID_OK, IMAGE_OK, AUTHOR_OK);
+            Assert.assertEquals(NEWSID_OK, news.getNewsId());
             Assert.assertEquals(TITLE_OK, news.getTitle());
             Assert.assertEquals(CONTENT_OK, news.getContent());
+            Assert.assertEquals(TAGID_OK, news.getTagId());
             Assert.assertEquals(IMAGE_OK, news.getImage());
-            Assert.assertEquals(ACCOUNT_OK, news.getAuthor());
+            Assert.assertEquals(AUTHOR_OK, news.getAuthor());
         }
 
         @Test(expected = NullPointerException.class)
-        public void withTitleNull() throws InvalidNewsException {
-            new News(null, CONTENT_OK, IMAGE_OK, ACCOUNT_OK);
-        }
-
-        @Test(expected = InvalidNewsException.class)
-        public void withTitleTooShort() throws InvalidNewsException {
-            new News("", CONTENT_OK, IMAGE_OK, ACCOUNT_OK);
-        }
-
-        @Test(expected = InvalidNewsException.class)
-        public void withTitleTooLong() throws InvalidNewsException {
-            String title = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-            new News(title, CONTENT_OK, IMAGE_OK, ACCOUNT_OK);
+        public void withTitleNull() throws InvalidNewsException, MalformedURLException {
+            final URL IMAGE_OK = new URL("https://www.yildiz-games.be/yildiz-engine/");
+            new News(NEWSID_OK, null, CONTENT_OK, TAGID_OK, IMAGE_OK, AUTHOR_OK);
         }
 
         @Test(expected = NullPointerException.class)
-        public void withContentNull() throws InvalidNewsException {
-            new News(TITLE_OK, null, IMAGE_OK, ACCOUNT_OK);
+        public void withContentNull() throws InvalidNewsException, MalformedURLException {
+            final URL IMAGE_OK = new URL("https://www.yildiz-games.be/yildiz-engine/");
+            new News(NEWSID_OK, TITLE_OK, null, TAGID_OK, IMAGE_OK, AUTHOR_OK);
         }
 
         @Test(expected = InvalidNewsException.class)
-        public void withContentTooShort() throws InvalidNewsException {
-            new News(TITLE_OK, "", IMAGE_OK, ACCOUNT_OK);
+        public void withContentTooShort() throws InvalidNewsException, MalformedURLException {
+            final URL IMAGE_OK = new URL("https://www.yildiz-games.be/yildiz-engine/");
+            new News(NEWSID_OK, TITLE_OK, "", TAGID_OK, IMAGE_OK, AUTHOR_OK);
         }
 
         @Test(expected = InvalidNewsException.class)
-        public void withContentTooLong() throws InvalidNewsException {
+        public void withContentTooLong() throws InvalidNewsException, MalformedURLException {
+            final URL IMAGE_OK = new URL("https://www.yildiz-games.be/yildiz-engine/");
             StringBuilder sb = new StringBuilder();
-            for(int i = 0; i <= News.CONTENT_MAX; i++) {
+            for (int i = 0; i <= News.CONTENT_MAX; i++) {
                 sb.append('a');
             }
 
-            new News(TITLE_OK, sb.toString(), IMAGE_OK, ACCOUNT_OK);
+            new News(NEWSID_OK, TITLE_OK, sb.toString(), TAGID_OK, IMAGE_OK, AUTHOR_OK);
         }
 
         @Test(expected = NullPointerException.class)
         public void withNullImage() throws InvalidNewsException {
-            new News(TITLE_OK, CONTENT_OK, null, ACCOUNT_OK);
+            new News(NEWSID_OK, TITLE_OK, CONTENT_OK, TAGID_OK, null, AUTHOR_OK);
         }
 
         @Test(expected = NullPointerException.class)
-        public void withNullAuthor() throws InvalidNewsException {
-            new News(TITLE_OK, CONTENT_OK, IMAGE_OK, null);
+        public void withNullAuthor() throws InvalidNewsException, MalformedURLException {
+            final URL IMAGE_OK = new URL("https://www.yildiz-games.be/yildiz-engine/");
+            new News(NEWSID_OK, TITLE_OK, CONTENT_OK, TAGID_OK, IMAGE_OK, null);
         }
     }
 
     public static class UpdateTitle {
 
         @Test
-        public void happyFlow() throws InvalidNewsException {
-            News news = new News(TITLE_OK, CONTENT_OK, IMAGE_OK, ACCOUNT_OK);
+        public void happyFlow() throws InvalidNewsException, MalformedURLException {
+            final URL IMAGE_OK = new URL("https://www.yildiz-games.be/yildiz-engine/");
+            News news = new News(NEWSID_OK, TITLE_OK, CONTENT_OK, TAGID_OK, IMAGE_OK, AUTHOR_OK);
             news = news.updateTitle(TITLE_OK + "a");
             Assert.assertEquals(TITLE_OK + "a", news.getTitle());
         }

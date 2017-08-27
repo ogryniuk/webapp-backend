@@ -34,6 +34,6 @@ import java.util.List;
 @FunctionalInterface
 public interface NewsProvider {
 
-    List<News> findLast(String language, int number) throws InvalidNewsException;
+    List<News> findLatest(String language, int newsNumber) throws InvalidNewsException;
 
 }
