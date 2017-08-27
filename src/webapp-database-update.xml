@@ -8,14 +8,14 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
 <changeSet id="1" author="me">
 
 <createTable
-schemaName="YILDIZDATABASE"
+schemaName="YILDIZWEBAPPDATABASE"
 tableName="AUTHORS">
 
 <column name = "AUT_ID" type="SMALLINT UNSIGNED" autoIncrement="true">
 <constraints primaryKey="true"/>
 </column>
 
-<column name = "AUT_NAME" type= "VARCHAR(35)" defaultValue="default"/>
+<column name = "AUT_NAME" type= "VARCHAR(255)" defaultValue="default"/>
 
 <column name = "ACC_ID" type="SMALLINT UNSIGNED"  autoIncrement="true"/>
 
@@ -23,7 +23,7 @@ tableName="AUTHORS">
 </createTable>
 
 <createTable
-schemaName="YILDIZDATABASE"
+schemaName="YILDIZWEBAPPDATABASE"
 tableName="NEWS">
 
 <column name = "NEW_ID" type="SMALLINT UNSIGNED" autoIncrement="true">
@@ -34,7 +34,7 @@ tableName="NEWS">
 <constraints foreignKeyName="FK_AUT_ID"  referencedTableName="AUTHORS" referencedColumnNames="AUT_ID" />
 </column>
 
-<column name = "NEW_CREATION DATE" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
+<column name = "NEW_CREATION_DATE" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
 
 <column name = "TAG_ID" type="SMALLINT UNSIGNED">
 <constraints primaryKey="true"/> 
@@ -47,7 +47,7 @@ tableName="NEWS">
 </createTable>
 
 <createTable 
-schemaName="YILDIZDATABASE"
+schemaName="YILDIZWEBAPPDATABASE"
 tableName="NEWS_EN"> 
 
 <column name = "NEW_ID"> 
@@ -58,19 +58,11 @@ tableName="NEWS_EN">
 
 <column name = "CONTENT" type="VARCHAR(255)" defaultValue="default"/>
 
-<column name = "TAG_ID"
-<constraints primaryKey="true" foreignKeyName="FK_TAG_ID" referencedTableName="TAGS" referencedColumnNames="TAG_ID"> 
-<constraints/>
-</column>
-<column name = "PIC" type="DATALINK">
-<constraints foreignKeyName="FK_PIC" referencedTableName="NEWS" referencedColumnNames="PIC"/>
-</column>
-
 </createTable>
 
 
 <createTable
-schemaName="YILDIZDATABASE"
+schemaName="YILDIZWEBAPPDATABASE"
 tableName="NEWS_FR"> 
 
 <column name = "NEW_ID"> 
@@ -81,18 +73,10 @@ tableName="NEWS_FR">
 
 <column name = "CONTENT" type="VARCHAR(255)" defaultValue="default"/>
 
-<column name = "TAG_ID">
-<constraints primaryKey="true" foreignKeyName="FK_TAG_ID" referencedTableName="TAGS" referencedColumnNames="TAG_ID"/> 
-</column>
-
-<column name = "PIC" type="DATALINK">
-<constraints foreignKeyName="FK_PIC" referencedTableName="NEWS" referencedColumnNames="PIC"/>
-</column>
-
 </createTable>
 
 <createTable
-schemaName="YILDIZDATABASE"
+schemaName="YILDIZWEBAPPDATABASE"
 tableName="TAGS">
 
 <column name = "TAG_ID" type="SMALLINT UNSIGNED">
@@ -106,7 +90,7 @@ tableName="TAGS">
 </createTable>
 
 <createTable
-schemaName="YILDIZDATABASE"
+schemaName="YILDIZWEBAPPDATABASE"
 tableName="TAGS_EN"> 
 
 <column name = "TAG_ID" type="SMALLINT UNSIGNED">
@@ -118,7 +102,7 @@ tableName="TAGS_EN">
 </createTable>
 
 <createTable
-schemaName="YILDIZDATABASE"
+schemaName="YILDIZWEBAPPDATABASE"
 tableName="TAGS_FR"> 
 
 <column name = "TAG_ID" type="SMALLINT UNSIGNED">
