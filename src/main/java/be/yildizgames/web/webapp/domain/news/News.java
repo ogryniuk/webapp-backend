@@ -30,7 +30,7 @@ import java.time.LocalDateTime;
 /**
  * Implements a Domain model for News in the module 'webapp-backend'
  *
- * @author Oleksandr Gryniuk
+ * @author Grégory Van den Borre
  *
  */
 public class News implements NewsDto {
