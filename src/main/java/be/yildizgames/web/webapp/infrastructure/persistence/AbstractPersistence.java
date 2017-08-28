@@ -72,14 +72,12 @@ abstract class AbstractPersistence <T> {
 
     final List<T> listFromSQL(String sql) {
         try (Connection c = this.provider.getConnection(); PreparedStatement stmt = c.prepareStatement(sql)){
-            {
                 ResultSet rs = stmt.executeQuery();
                 List<T> result = Lists.newList();
                 while(rs.next()) {
                     result.add(this.fromRS(rs));
                 }
                 return result;
-            }
         } catch (SQLException e) {
             LOGGER.error("Persistence error" ,e);
             throw new TechnicalException();
